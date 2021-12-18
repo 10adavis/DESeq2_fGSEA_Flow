@@ -1,0 +1,39 @@
+---
+title: "95_Make_Clean"
+author: ""
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  rmarkdown::html_document:
+    toc: TRUE
+---
+
+# Install/Load dependencies
+```{r, echo=TRUE, message=FALSE, Loading_Dependencies_95}
+# Load dependencies:
+library(here)
+```
+
+# Clean the Results directory before 99_Run_All.Rmd
+```{r Clean, echo=TRUE}
+dirs_to_clean <- c("Results")
+
+
+if(!dir.exists(here(dirs_to_clean))){
+  dir.create(here(dirs_to_clean))
+}
+
+
+for(i1 in 1:length(dirs_to_clean)){
+  temp_file_list <- 
+    dir(here(dirs_to_clean[i1]), recursive = TRUE)
+  file.remove(here(dirs_to_clean[i1], temp_file_list))
+}
+```
+
+
+### Session information
+```{r session_info_95}
+sessionInfo()
+```
+
+This document was processed on: `r Sys.Date()`.

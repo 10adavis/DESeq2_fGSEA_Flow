@@ -1,0 +1,43 @@
+---
+title: "99_Run_All"
+author: ""
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  rmarkdown::html_document:
+    toc: TRUE
+---
+
+
+# Install/Load dependencies
+```{r, echo=TRUE, message=FALSE, Loading_Dependencies_99}
+# Load dependencies:
+library(here)
+library(rmarkdown)
+```
+
+```{r Run_all, include=FALSE}
+files_in_r_to_run <- 
+  c("1.03_Gather-and-Tidy-Data.Rmd","2.03_Downstream_Analysis.Rmd")
+
+for(i1 in 1:length(files_in_r_to_run)){
+  
+  rmarkdown::render(here("R_scripts", files_in_r_to_run[i1]),
+                    output_format = 
+                      html_document(html_preview = TRUE, toc = TRUE),
+                    output_dir = here("Results"))
+}
+
+rmarkdown::render(here("README.Rmd"),
+                  output_format =  html_document(html_preview = TRUE, toc = TRUE,keep_md=TRUE),
+                  output_dir = here())
+
+```
+
+
+
+### Session information
+```{r session_info_99}
+sessionInfo()
+```
+
+This document was processed on: `r Sys.Date()`.

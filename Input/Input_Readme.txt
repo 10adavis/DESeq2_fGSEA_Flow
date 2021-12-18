@@ -1,0 +1,1 @@
+This directory contains all necessary input data to run this analysis.
