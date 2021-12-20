@@ -1,0 +1,100 @@
+---
+title: "3.03_GSEA"
+author: "Andrew Davis"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_document:
+    toc: TRUE
+---
+
+# Objectives:
+In this script the user will run fGSEA against GO, Reactome, and Wikipathways on the DESeq2 results for each comparison generated in [2.03_DESeq2.Rmd](../R_scripts/2.03_DESeq2.Rmd)
+
+# Install/Load dependencies
+```{r include=FALSE}
+# Load dependencies:
+library('readxl')
+library('dplyr')
+library('fgsea')
+library('org.Hs.eg.db')
+library('GO.db')
+library("reactome.db")
+library('ggplot2')
+library('GSEABase')
+library('data.table')
+library('biomartr')
+library('annotate')
+library('msigdbr')
+```
+
+## Set random seed
+Setting a random seed helps keep the scripts reproducible
+```{r set_random}
+set.seed(1234)
+```
+
+## Download gene sets:
+```{r, Download_pathways_msigdbr}
+# Retrieve human genes for all gene sets in the database.
+m_df_BP = msigdbr(species = "Homo sapiens",subcategory=c("BP"))
+m_df_MF = msigdbr(species = "Homo sapiens",subcategory=c("MF"))
+m_df_CPREACTOME = msigdbr(species = "Homo sapiens",subcategory=c("CP:REACTOME"))
+m_df_wikipathways = msigdbr(species = "Homo sapiens",subcategory=("WIKIPATHWAYS"))
+m_list_BP = m_df_BP %>% split(x = .$gene_symbol, f = .$gs_name)
+m_list_MF = m_df_MF %>% split(x = .$gene_symbol, f = .$gs_name)
+m_list_CPREACTOME = m_df_CPREACTOME %>% split(x = .$gene_symbol, f = .$gs_name)
+m_list_wikipathways = m_df_wikipathways %>% split(x = .$gene_symbol, f = .$gs_name)
+m_list<-c(m_list_BP,m_list_MF,m_list_CPREACTOME,m_list_wikipathways)
+```
+
+## Functions:
+```{r, Functions_5}
+# Rank the genes by adj p-value and log2-FC
+rank_DEG <- function(DEGs){
+  DEGs_ranked <- DEGs
+  DEGs_ranked$fcsign <- sign(DEGs_ranked$logFC)
+DEGs_ranked[6] <- lapply(DEGs_ranked[6], function(x) replace(x, x == 0, min(x[x>0], na.rm = TRUE)))
+  DEGs_ranked$logP<--log(DEGs_ranked$pvalue)
+  DEGs_ranked$metric= DEGs_ranked$logP/DEGs_ranked$fcsign
+  # Prepare ranked list for running GSEA
+  # Subset for gene_name and rank metric
+  y<-DEGs_ranked[,c("gene_name", "metric")]
+  y<-as.data.frame(y)
+  y_uni = y[!duplicated(y$gene_name),]
+  # convert y to a named vector, which is required format for fgsea
+  y_uni<-setNames(y_uni$metric,y_uni$gene_name)
+  # sort the list
+  y_uni_sort<-sort(y_uni)
+  return(y_uni_sort)
+}
+# Perform GSEA of the full preranked gene list against Reactome and GO pathways and plot the results:
+GSEA_ALL <- function(ranked_DGEs,filename){
+  # Run GSEA for Reactome pathways
+  fgseaRes <- fgseaMultilevel(pathways=m_list, stats=ranked_DGEs, minSize=15,maxSize=500)
+  # Export the ranked gene sets:
+  fgseaRes_ex <- fgseaRes
+  fgseaRes_ex$leadingEdge <- vapply(fgseaRes_ex$leadingEdge, paste, collapse = ", ", character(1L))
+  write.csv((fgseaRes_ex[order(fgseaRes_ex$padj,-abs(fgseaRes_ex$NES)), ]),sprintf("../Results/GSEA_%s.csv",filename))
+}
+```
+
+
+## Run GSEA on all comparisons:
+```{r}
+for(i in 1:length(comparisons)){
+  # Rank the genes by p-value and log2-FC
+DEG_sort <- rank_DEG(anno_results[[i]])
+# Perform GSEA of the full preranked gene list against Reactome and GO pathways and plot the results
+GSEA_ALL(DEG_sort,paste0(comparisons[[i]][2],"_vs_",comparisons[[i]][3]))
+}
+```
+
+### Next step: 
+Proceed to run the .Rmd script: [3.07-Select-GSEA.Rmd](3.07-Select-GSEA.Rmd) summarized in [3.07-Select-GSEA.html](../Results/3.07-Select-GSEA.html)
+
+### Session information
+```{r session_info_303}
+sessionInfo()
+```
+
+This document was processed on: `r Sys.Date()`.

@@ -1,0 +1,268 @@
+---
+title: "2.03-DESeq2"
+author: "Andrew Davis"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_document:
+    toc: TRUE
+---
+
+# Objectives:
+In this script the user will run DESeq2 on the input counts and metadata after the user specifies the design of the model.
+
+### Install/Load dependencies
+```{r, echo=TRUE, message=FALSE, Loading_Dependencies_203}
+# Load dependencies:
+library('DESeq2')
+library('ashr')
+library('ggplot2')
+library(readxl)
+library(org.Hs.eg.db)
+library(pheatmap)   
+library(rlist)
+```
+
+## Creating the DeSeq2 object:
+First, the user needs to set the design of the model:
+```{r}
+dds <- DESeqDataSetFromMatrix(countData = counts, colData = metadata, design = ~ Treatment)
+```
+
+## Set contrasts
+One then needs to set the contrasts as follows. Each comparison should be set to a variable (e.g., comparison_1), which equals a character vector, consisting of 3 character strings: 
+1. The first string needs to correspond to the factor in design formula
+2. The name of the numerator level for the fold change
+3. The name of the denominator level for the fold change.
+```{r}
+comparison_1<-c("", "", "")
+comparisons<-list(comparison_1,comparison_2)
+```
+
+## Count normalization
+
+### To calculate normalized counts:
+```{r}
+dds <- estimateSizeFactors(dds)
+# show size factors for each sample:
+sizeFactors(dds)
+# Filter out low counts
+keep <- rowSums(counts(dds)) >= 10
+dds_filtered <- dds[keep,]
+```
+
+deseq2 will use these sizefactors to normalize the raw counts
+
+Normalized counts can then be extracted using the counts function.
+
+### Extract the normalized and raw counts:
+```{r}
+# extract the normalized counts:
+normalized_counts <- counts(dds_filtered, normalized=TRUE)
+write.csv(normalized_counts,"../Results/Filtered_Normalized_Counts.csv")
+# extract the raw counts:
+raw_counts <- counts(dds_filtered, normalized=FALSE)
+write.csv(raw_counts,"../Results/Filtered_Raw_Counts.csv")
+```
+
+
+## Exploratory analysis and visualization:
+
+### Unsupervised clustering
+```{r}
+# Transform across the normalized counts using the variance stabilizing transformation (VST) and the regularized logarithm (rlog). blind = TRUE means its blind to the sample information
+vsd <- vst(dds_filtered, blind=TRUE)
+# Transform across the normalized counts using the variance stabilizing transformation (blind = TRUE means its blind to the sample information)
+rld <- rlog(dds_filtered, blind=TRUE)
+# To set up the correlation heatmap:
+# Extract the vst matrix from the object 
+vsd_mat <- assay(vsd)   
+# Compute pairwise correlation values 
+vsd_cor <- cor(vsd_mat)   
+# Then use pheatmap: 
+# Plot heatmap 
+pdf("../Results/Sample_Correlation_VST.pdf",width = 10, height = 12)
+pheatmap(vsd_cor,annotation = metadata)
+dev.off()
+# This is useful for identifying outliers
+# To set up the correlation heatmap:
+# Extract the vst matrix from the object 
+rlog_mat <- assay(rld)   
+# Compute pairwise correlation values 
+rlog_cor <- cor(rlog_mat)   
+# Plot heatmap 
+pdf("../Results/Sample_Correlation_rlog.pdf",width = 10, height = 12)
+pheatmap(rlog_cor,annotation = metadata)
+dev.off()
+# This is useful for identifying outliers
+```
+
+## Conduct principal component analysis (PCA):
+
+### Plot biplot:
+The bi-plot comparing PC1 versus PC2 is the most characteristic plot of PCA. However, PCA is much more than the bi-plot and much more than PC1 and PC2. This said, PC1 and PC2, by the very nature of PCA, are indeed usually the most important parts of a PCA analysis.
+```{r}
+# Plot PCA  (color samples according to condition)
+tiff("../Results/PCA_PC1-vs-PC2_VST.tiff",width =1000, height = 1000, units = "px")
+plotPCA(vsd, intgroup=comparisons[[1]][1])
+dev.off()
+# Plot PCA  (color samples according to condition)
+tiff("../Results/PCA_PC1-vs-PC2_rlog.tiff",width = 1000, height = 1000, units = "px")
+plotPCA(rld, intgroup=comparisons[[1]][1])
+dev.off()
+```
+You want to see your groups/conditions separated by PC1. If not, there may be other sources of variation.
+
+Stat ellipses are also drawn around each group but have a greater statistical meaning and can be used, for example, as a strict determination of outlier samples. Here, we draw ellipses around each group at the 95% confidence level.
+
+Note that ellipses can only be drawn if you have >3 samples per group.
+```{r}
+tiff("../Results/PCA_PC1-vs-PC2_VST_ellipses.tiff",width =1000, height = 1000, units = "px")
+plotPCA(vsd, intgroup=comparisons[[1]][1]) + stat_ellipse()
+dev.off()
+tiff("../Results/PCA_PC1-vs-PC2_rlog_ellipses.tiff",width =1000, height = 1000, units = "px")
+plotPCA(rld, intgroup=comparisons[[1]][1]) + stat_ellipse()
+dev.off()
+```
+
+## Once you have your design you can run your DEseq2 analysis:
+```{r}
+dds_filt_deseq <- DESeq(dds_filtered)
+```
+
+## DESeq2 model-dispersion
+
+### Plot dispersions:
+```{r}
+# Plot dispersion estimates
+pdf("../Results/DESeq2_dispersions_plot.pdf")
+plotDispEsts(dds_filt_deseq)
+dev.off()
+plotDispEsts(dds_filt_deseq)
+```
+
+* Each black dot is a gene, with mean and dispersion values.
+* Gene wise dispersion is often inaccurate. So DEseq2 uses information across all genes to create an estimate for dispersion for a gene of a given mean expression (the red line). 
+* Genes with inaccurately small values of variation could yield false positives. therefore the original dispersion estimates are shrunken toward the curves (blue dots). 
+* The more high dispersion values (blue circles) are not shrunken, because they may have higher variability because of true biological differences. 
+* More replicates estimates the mean and variation more accurately, leading to reduced shrinkage. 
+* Worrisome plots include a cloud of black dots that dont follow the red line, or dispersions that don't decrease with increasing mean expression. These are typically caused by outliers or contamination in your data
+
+## DESeq2 model:
+
+By default DESeq2 will use the Wald test for pair wise comparisons to test for differences in expression for the 2 conditions of interest.
+
+First, we need to specify the contrasts function, which can be added to the results function
+
+ex: results(dds, contrast = c("condition_factor", "level_to_compare", "base_level"),alpha = 0.05)
+
+### Set up the contrasts:
+```{r}
+# Generate results:
+results<-list(0)
+for(i in 1:length(comparisons)){
+  results[i]<-results(dds_filt_deseq, contrast = comparisons[[i]], alpha = 0.05)
+}
+```
+
+## MA Plots
+The MA plot plots the mean of normalized counts against log2 fold change.
+```{r}
+for(i in 1:length(comparisons)){
+  print(paste0(comparisons[[i]][2],"_vs_",comparisons[[i]][3]))
+plotMA(results[[i]], ylim=c(-8,8))
+}
+```
+
+## To improve the estimated fold changes, you can shrink the fold changes:
+To generate more accurate log2 foldchange estimates, DESeq2 allows for the shrinkage of the LFC estimates toward zero when the information for a gene is low, which could include:
+  + Low counts
+  + High dispersion values
+As with the shrinkage of dispersion estimates, LFC shrinkage uses information from all genes to generate more accurate estimates.
+```{r }
+res_shrink<-list(0)
+for(i in 1:length(comparisons)){
+  res_shrink[i] <- lfcShrink(dds_filt_deseq, contrast = comparisons[[i]], res=results[[i]],type="ashr")
+}
+```
+#### This doesn't reduce the number of significant genes, but it does reduce the log2FC values
+
+## MA Plots
+```{r}
+# The MA plot plots the mean of normalized counts against log2 fold change.
+for(i in 1:length(comparisons)){
+  print(paste0(comparisons[[i]][2],"_vs_",comparisons[[i]][3]))
+plotMA(res_shrink[[i]], ylim=c(-8,8))
+}
+```
+
+# Plot p-value histograms:
+```{r }
+pval_hist <- function(res,filenames){
+tiff(sprintf("../Results/%s_pvalue_histogram.tiff",filenames), height=600, width=600,units = "px")
+use <- res$baseMean > metadata(res)$filterThreshold
+h1 <- hist(res$pvalue[!use], breaks=0:50/50, plot=FALSE)
+h2 <- hist(res$pvalue[use], breaks=0:50/50, plot=FALSE)
+colori <- c(`do not pass`="khaki", `pass`="powderblue")
+# Histogram of p values for all tests. The area shaded in blue indicates the subset of those that pass the filtering, the area in khaki those that do not pass:
+barplot(height = rbind(h1$counts, h2$counts), beside = FALSE,
+        col = colori, space = 0, main = filenames, ylab="frequency")
+text(x = c(0, length(h1$counts)), y = 0, label = paste(c(0,1)),
+     adj = c(0.5,1.7), xpd=NA)
+legend("topright", fill=rev(colori), legend=rev(names(colori)))
+dev.off()
+  print(filenames)
+  barplot(height = rbind(h1$counts, h2$counts), beside = FALSE,
+        col = colori, space = 0, main = filenames, ylab="frequency")
+text(x = c(0, length(h1$counts)), y = 0, label = paste(c(0,1)),
+     adj = c(0.5,1.7), xpd=NA)
+legend("topright", fill=rev(colori), legend=rev(names(colori)))
+}
+for(i in 1:length(comparisons)){
+pval_hist(res_shrink[[i]],paste0(comparisons[[i]][2],"_vs_",comparisons[[i]][3]))
+}
+```
+
+# Annotate and export results:
+
+## write annotate/export function:
+Note that this function is intended for results that have been processed with lfcShrink
+```{r}
+annotate<-function(res,comparison){
+  res_anno<-as.data.frame(res)
+  res_anno$gene_id<-rownames(res_anno)
+  res_anno$SYMBOL <- mapIds(org.Hs.eg.db, keys=rownames(res_anno), column="SYMBOL", keytype="ENSEMBL", multiVals="first")
+  res_anno<-res_anno[!is.na(res_anno$SYMBOL), ]
+  res_anno<-res_anno[!duplicated(res_anno$SYMBOL), ]
+  res_anno<-as.data.frame(res_anno[,c(6,7,1,2:5)])
+  colnames(res_anno)[c(2,4,7)]<-c("gene_name","logFC","adj.P.Val")
+  res_anno<-res_anno[order(res_anno$adj.P.Val),]
+  write.csv(res_anno,sprintf("../Results/%s_DESeq2.csv",comparison),row.names = FALSE)
+return(res_anno)
+}
+```
+
+## Annotate and export the results:
+```{r }
+# Annotate and export the results:
+anno_results<-list(0)
+for(i in 1:length(comparisons)){
+anno_results[[i]]<-annotate(res_shrink[[i]],paste0(comparisons[[i]][2],"_vs_",comparisons[[i]][3]))
+}
+```
+Note on p-values set to NA: some values in the results table can be set to NA for one of the following reasons:
+
+If within a row, all samples have zero counts, the baseMean column will be zero, and the log2 fold change estimates, p value and adjusted p value will all be set to NA.
+If a row contains a sample with an extreme count outlier then the p value and adjusted p value will be set to NA. These outlier counts are detected by Cook’s distance. Customization of this outlier filtering and description of functionality for replacement of outlier counts and refitting is described below
+If a row is filtered by automatic independent filtering, for having a low mean normalized count, then only the adjusted p value will be set to NA. Description and customization of independent filtering is described below
+
+For more details, see the DESeq2 vignette and FAQs: [https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#why-are-some-p-values-set-to-na](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#why-are-some-p-values-set-to-na)
+
+### Next step: 
+Proceed to run the .Rmd script: [2.07_Volcano-Plots.Rmd](2.07_Volcano-Plots.Rmd) summarized in [2.07_Volcano-Plots.html](../Results/2.07_Volcano-Plots.html)
+
+### Session information
+```{r session_info_203}
+sessionInfo()
+```
+
+This document was processed on: `r Sys.Date()`.

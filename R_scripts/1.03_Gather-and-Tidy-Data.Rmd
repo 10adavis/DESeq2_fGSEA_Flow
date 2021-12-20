@@ -7,26 +7,42 @@ output:
     toc: TRUE
 ---
 
-### Install/Load dependencies
-```{r, echo=TRUE, message=FALSE, Loading_Dependencies_1}
-# Load dependencies:
-library(BiocManager)
+## CHANGE ME!!!
+In order to run this pipeline on your data please add your counts and metadata to the [Input](../Input) folder. One will have to modify the directory paths to the counts and metadata files below. By default this pipeline will run on the data in the [test_data](../test_data). 
+
+# Objectives:
+In this script the user will read in the raw counts and metadata that will be used as input for the DESeq2 analysis.
+
+
+## Read in the raw counts associated with this experiment:
+This table should be a csv file, where the first column corresponds to gene names (ENSEMBL Gene IDs), and the columns correspond to the counts associated for each sample in the experiment. Note that the order of the columns need to be in the same as the order of the sample names in the metadata table below.
+
+### Read in counts
+```{r}
+counts<-read.csv('../test_data/example_counts.csv',header=TRUE,row.names = 1)
+head(counts)
 ```
 
-
-
-
-This document was processed on: `r Sys.Date()`.
-
-### Read-in input data:
-```{r} 
-
+### Read in metadata:
+```{r}
+# Create data frame
+metadata <- read.csv("../test_data/example_metadata.csv",row.names=1)
+head(metadata)
 ```
 
+## Check that the rows of metadata are in the same order as the columns in counts:
+The row names of the metadata needs to be in the same order of the colnames of your raw counts data.
+```{r}
+# This can be checked with: 
+all(rownames(metadata) == colnames(counts))
+```
+
+### Next step: 
+Proceed to run the .Rmd script: [2.03-DESeq2.Rmd](2.03-DESeq2.Rmd) summarized in [2.03-DESeq2.html](../Results/2.03-DESeq2.html)
 
 ### Session information
 ```{r session_info_103}
 sessionInfo()
 ```
 
-
+This document was processed on: `r Sys.Date()`.

@@ -1,0 +1,71 @@
+---
+title: "2.07_Volcano-Plots"
+author: "Andrew Davis"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_document:
+    toc: TRUE
+---
+# Objectives:
+In this script the user will generate volcano plots for each comparison results generated in [2.03-DESeq2.Rmd](../R_scripts/2.03-DESeq2.Rmd)
+
+### Install/Load dependencies
+```{r, echo=TRUE, message=FALSE, Loading_Dependencies_205}
+# Load dependencies:
+library('ggplot2')
+library('EnhancedVolcano')
+```
+
+### Plot volcanoes:
+The following function takes 2 input arguments:
+  1. DEGs: the results data frame output from the "annotate" function in 2.03-DESeq2.Rmd
+  2. filenames: a character string describing the particular comparison being made in the DEGs df
+  
+Note that the x and y axes limits may need to be modified depending on the DE results for your particular experiment
+```{r volcano_function}
+plot_volcano <- function(DEGs,filenames){
+pdf(sprintf("../Results/%s_volcano_padj-0.05_log2FC-1.pdf",filenames), height=8, width=8)
+  volcano <- EnhancedVolcano(DEGs,
+        lab = DEGs$gene_name,
+        x = 'logFC',
+        y = 'adj.P.Val',
+        xlab = bquote(~Log[2]~ "fold change"),
+        ylab = bquote(~-Log[10]~adjusted~italic(P)),
+        pCutoff = 0.05,
+        FCcutoff = 1,
+        xlim=c(-5,5),
+        ylim=c(-0.1,50),
+        colAlpha = 1,
+        legendPosition = "bottom",
+        legendLabSize = 14,
+        legendIconSize = 4.0,
+        border = "full",
+        borderWidth = 1.5,
+        borderColour = "black",
+        gridlines.major = FALSE,
+        gridlines.minor = FALSE,
+        title = sprintf("%s",filenames))
+  print(volcano)
+dev.off()
+  print(filenames)
+  print(volcano)
+}
+```
+
+### plot volcanoes
+```{r Plot-volcanoes}
+# Annotate and export the volcano plots:
+for(i in 1:length(comparisons)){
+plot_volcano(anno_results[[i]],paste0(comparisons[[i]][2],"_vs_",comparisons[[i]][3]))
+}
+```
+
+### Next step: 
+Proceed to run the .Rmd script: [3.03_GSEA.Rmd](3.03_GSEA.Rmd) summarized in [3.03_GSEA.html](../Results/3.03_GSEA.html)
+
+### Session information
+```{r session_info_207}
+sessionInfo()
+```
+
+This document was processed on: `r Sys.Date()`.
