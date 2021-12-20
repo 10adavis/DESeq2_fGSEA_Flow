@@ -1,5 +1,5 @@
 ---
-title: "2.03-DESeq2"
+title: "2.03_DESeq2"
 author: "Andrew Davis"
 date: "`r Sys.Date()`"
 output:

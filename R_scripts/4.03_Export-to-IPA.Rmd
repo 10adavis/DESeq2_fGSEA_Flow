@@ -1,0 +1,67 @@
+---
+title: "4.03_Export-to-IPA"
+author: "Andrew Davis"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_document:
+    toc: TRUE
+---
+
+# Objectives:
+In this script the user will collate all of the DESeq2 results for each comparison generated in [2.03_DESeq2.Rmd](../R_scripts/2.03_DESeq2.Rmd), which is useful for uploading into IPA.
+
+### Install/Load dependencies
+```{r, echo=TRUE, message=FALSE, Loading_Dependencies_203}
+# Load dependencies:
+library(rlist)
+```
+
+## Concatenate all of the results into a single table and export (for IPA, etc):
+```{r}
+# Create the list of DEG data frames:
+new_names<-list()
+for(i in 1:length(comparisons)){
+new_names<-append(new_names,list(paste0(comparisons[[i]][2],"_vs_",comparisons[[i]][3])))
+}
+DESeq2_list_suffix <- lapply(1:length(anno_results), function(i) {
+  suffix <- anno_results[[i]] # Double brackets for a list
+  names(suffix) <- paste0(names(suffix), sep=".",paste0(comparisons[[i]][2],"_vs_",comparisons[[i]][3])) 
+  suffix$gene_id<-row.names(suffix)
+  suffix 
+})
+# For Full (Outer) Join
+res_all <- Reduce(
+  function(x, y, ...) merge(x, y, all = TRUE,by="gene_id"),DESeq2_list_suffix
+)
+# Fix column names (change the last number (width of the dataframe))
+res_all<-res_all[,c(1,3,4:ncol(res_all))]
+colnames(res_all)[c(2,3)]<-c("gene_name","base_mean")
+# for the sake of IPA, I converted all of the NA adjP values to 1:
+res_all[is.na(res_all)] <- 1
+write.csv(res_all,"../IPA/Merged_Treatment_Comparisons_DESeq2_Results.csv")
+```
+
+## Generate DEG summary table:
+```{r DEG_tables}
+DEG_columns<-c("Comparison","Total DEGs (adjP<0.05)","Upregulated genes (logFC>0, adjP<0.05)","Downregulated genes (logFC<0, adjP<0.05)")
+# for loop
+DEG_sig<-as.list(0)
+DEG_row<-as.list(0)
+for (i in 1:length(anno_results)){
+DEG_sig[[i]]<-subset(anno_results[[i]],anno_results[[i]]$adj.P.Val<0.05)
+DEG_row[[i]]<-c(as.character(new_names[i]),length(DEG_sig[[i]]$logFC),length((subset(DEG_sig[[i]],DEG_sig[[i]]$logFC>0)$logFC)),length(subset(DEG_sig[[i]],DEG_sig[[i]]$logFC<0)$logFC))
+}
+DEG_table<-list.rbind(DEG_row)
+colnames(DEG_table)<-DEG_columns
+write.csv(DEG_table,"../Results/DEG_Summary_Table.csv",row.names = F)
+```
+
+### Next step: 
+Proceed to run the .Rmd script: [5.03_Gene-Heatmaps.Rmd](5.03_Gene-Heatmaps.Rmd) summarized in [5.03_Gene-Heatmaps.html](../Results/5.03_Gene-Heatmaps.html)
+
+### Session information
+```{r session_info_403}
+sessionInfo()
+```
+
+This document was processed on: `r Sys.Date()`.

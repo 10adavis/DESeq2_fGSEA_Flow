@@ -1,0 +1,76 @@
+---
+title: "5.03_Gene-Heatmaps"
+author: "Andrew Davis"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_document:
+    toc: TRUE
+---
+  
+# Objectives:
+Perform unsupervised clustering and generate heatmaps to identify potential clustering of samples
+
+### Install/Load dependencies
+```{r, echo=TRUE, message=FALSE, Loading_Dependencies_503}
+# Load dependencies:
+library(org.Hs.eg.db)
+library(gplots)
+library(genefilter)
+```
+
+
+```{r}
+#' Establish clustering functions:
+hclust2 <- function(x, method="average", ...)
+  hclust(x, method=method, ...)
+dist2 <- function(x, ...)
+  as.dist(1-cor(t(x), method="pearson"))
+# Annotate normalized counts from ENSEMBL ID to Gene Symbol
+normalized_counts_anno<-as.data.frame(normalized_counts)
+normalized_counts_anno$gene_id<-rownames(normalized_counts_anno)
+normalized_counts_anno$SYMBOL <- mapIds(org.Hs.eg.db, keys=rownames(normalized_counts_anno), column="SYMBOL", keytype="ENSEMBL", multiVals="first")
+normalized_counts_anno<-normalized_counts_anno[!is.na(normalized_counts_anno$SYMBOL), ]
+normalized_counts_anno<-normalized_counts_anno[!duplicated(normalized_counts_anno$SYMBOL), ]
+normalized_counts_anno<-as.data.frame(normalized_counts_anno[,c(ncol(normalized_counts_anno),1:(ncol(normalized_counts_anno)-2))])
+row.names(normalized_counts_anno)<-normalized_counts_anno$SYMBOL
+normalized_counts_anno<-normalized_counts_anno[,c(2:ncol(normalized_counts_anno))]
+# Subset for Rejuvenation genes of interest:
+genes_of_interest<-c("TP63","TP53","KRT5")
+normalized_counts_anno_GOI<-normalized_counts_anno[match(genes_of_interest, row.names(normalized_counts_anno)), ]
+par(cex.main=10)
+mat=data.matrix(normalized_counts_anno_GOI)
+matScaled <- (mat - rowMeans(mat)) / rowSds(mat)
+# Export as pdf 
+# Note: You may need to modify the various parameters of the heatmap.2() function above to fit the heatmaps and the labels/legends.
+pdf("../Results/Heatmap_Select_Genes.pdf", height=16, width=16)
+heatmap.2(matScaled,
+          Rowv=FALSE,
+          Colv=TRUE,
+          dendrogram=c("column"),
+          distfun = dist2,
+          hclustfun = hclust2,
+          #xlab = "",
+          #ylab = "",
+          key=TRUE,
+          trace="none",
+          margins=c(12,10), # a good margin is c(16,10) but that wont fit all your labels
+          density.info=c("none"),
+          col=bluered(256), ##col=terrain.colors(100) and terrain.colors is another (ugly) option
+          #add numbers into the cell
+          #cellnote=round(mat,1),
+          #notecol="white",
+          #notecex=1,
+          labRow = rownames(matScaled),
+          lhei=c(0.1,1.2),
+          scale="row",
+          cexCol=2, cexRow = 2,
+          main = "Select Genes", cex.main=3)
+dev.off() 
+```
+
+### Session information
+```{r session_info_503}
+sessionInfo()
+```
+
+This document was processed on: `r Sys.Date()`.

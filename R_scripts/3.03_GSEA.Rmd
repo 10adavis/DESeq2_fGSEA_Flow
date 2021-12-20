@@ -90,7 +90,7 @@ GSEA_ALL(DEG_sort,paste0(comparisons[[i]][2],"_vs_",comparisons[[i]][3]))
 ```
 
 ### Next step: 
-Proceed to run the .Rmd script: [3.07-Select-GSEA.Rmd](3.07-Select-GSEA.Rmd) summarized in [3.07-Select-GSEA.html](../Results/3.07-Select-GSEA.html)
+Proceed to run the .Rmd script: [4.03_Export-to-IPA.Rmd](4.03_Export-to-IPA.Rmd) summarized in [4.03_Export-to-IPA.html](../Results/4.03_Export-to-IPA.html)
 
 ### Session information
 ```{r session_info_303}
