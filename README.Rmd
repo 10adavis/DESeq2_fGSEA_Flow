@@ -15,54 +15,61 @@ knitr::opts_chunk$set(
 )
 
 Rversion<-R.Version()
-RNAseq_GSEA_Flow_version<-"v1.0"
-RNAseq_GSEA_Flow_URL<-"https://github.com/10adavis/RNAseq_GSEA_Flow/releases/tag/v1.0"
+DESeq2_fGSEA_Flow_version<-"v1.0"
+DESeq2_fGSEA_Flow_URL<-"https://github.com/10adavis/DESeq2_fGSEA_Flow /releases/tag/v1.0"
 ```
 
-RNAseq_GSEA_Flow `r RNAseq_GSEA_Flow_version`
+DESeq2_fGSEA_Flow `r DESeq2_fGSEA_Flow_version`
 
 ## Introduction
 
-RNAseq_GSEA_Flow has been produced to provide a standardized RNA-seq analysis pipeline.
+DESeq2_fGSEA_Flow has been produced to provide a standardized RNA-seq analysis pipeline.
 
 This pipeline utilizes [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) and [fGSEA](https://bioconductor.org/packages/release/bioc/html/fgsea.html) R packages to generate the following outputs:
+
 -   Normalized count data
 -   Quality control including metrics and plots
 -   Differentially expressed genes (with statistics) between treatments/conditions
 -   Visualization of DE results as volcano plots
 -   Gene set enrichment results using the fGSEA package
 
-RNAseq_GSEA_Flow was developed to automate these analyses in a logical and fully reproducible manner. 
+DESeq2_fGSEA_Flow was developed to automate these analyses in a logical and fully reproducible manner.
 
 To support the reproducibility of these analyses, this pipeline employs literate programming using [Rmarkdown(Rmd)](https://rmarkdown.rstudio.com/) and full R package dependency management using the [renv](https://rstudio.github.io/renv/articles/renv.html) package.
 
-![](Images/pipeline.png)
+![](Images/pipeline_workflow.png)
 
-By default this pipeline will run on the example RNA-seq data in the [test_data](test_data) folder
+By default this pipeline will run on the example RNA-seq data in the [test_data](test_data) folder.
 
-It is expected that this pipeline will be run on user provided data, in an iterative manner, with the user modifying the Rmarkdown scripts in folder [R_Scripts](R_Scripts).To do so, the user needs to input 1) Raw count data and 2) Associated sample metadata. It is expected that the user has a thorough understanding of RNA-seq and DESeq2 [M. Love, W. Huber, S. Anders. Genome Biology. 2014](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0550-8). 
+This data consists of RNA-seq data generated in the following study: [Interferon Receptor Signaling Pathways Regulating PD-L1 and PD-L2 Expression. A. Garcia-Diaz, et al. 2017. Cell Reports](https://www.cell.com/cell-reports/fulltext/S2211-1247(17)30525-9?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS2211124717305259%3Fshowall%3Dtrue#secsectitle0035) and deposited on GEO, here: [GSE96619](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE96619).
+
+
+
+
+
+It is expected that this pipeline will be run on user provided data, in an iterative manner, with the user modifying the Rmarkdown scripts in folder [R_Scripts](R_Scripts).To do so, the user needs to input 1) Raw count data and 2) Associated sample metadata. It is expected that the user has a thorough understanding of RNA-seq and DESeq2 [M. Love, W. Huber, S. Anders. Genome Biology. 2014](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0550-8).
 
 ## Reasons to use RNAseq_GSEA_Flow:
-1. Run differential gene expression analysis on RNA-seq data using DESeq2, which is one of the most commonly used methods in bioinformatics.
-2. Quickly understand biological changes in your data, by running fGSEA, a popular R packages that performs fast, pre-ranked gene set enrichment analysis. 
-3. Easily and quickly upload your own RNA-seq count data and sample metadata (drag and drop to the Input folder). 
-4. Reminds you to capture essential metadata, in a consistent format, in this readme file - simply fill in the blanks in the pre-drafted report below. 
-5. Can be run on a typical PC, on most operating systems, including Windows, Mac, and Linux, for free.
-6. Developed and shared as a fully open source, version controlled repository using GitHub, the most popular code hosting platform for version control and collaboration. 
-7. Generate comprehensive html reports that can be easily shared with stakeholders and captured in ELN reports. 
-8. Analyses can be quickly and easily reproduced by any other user when used in conjunction with git and GitHub. 9. Automatically export the results as a single file for quick upload to Ingenuity Pathway Analysis (IPA) as a single dataset. 
 
+1.  Run differential gene expression analysis on RNA-seq data using DESeq2, which is one of the most commonly used methods in bioinformatics.
+2.  Quickly understand biological changes in your data, by running fGSEA, a popular R packages that performs fast, pre-ranked gene set enrichment analysis.
+3.  Easily and quickly upload your own RNA-seq count data and sample metadata (drag and drop to the Input folder).
+4.  Reminds you to capture essential metadata, in a consistent format, in this readme file - simply fill in the blanks in the pre-drafted report below.
+5.  Can be run on a typical PC, on most operating systems, including Windows, Mac, and Linux, for free.
+6.  Developed and shared as a fully open source, version controlled repository using GitHub, the most popular code hosting platform for version control and collaboration.
+7.  Generate comprehensive html reports that can be easily shared with stakeholders and captured in ELN reports.
+8.  Analyses can be quickly and easily reproduced by any other user when used in conjunction with git and GitHub. 9. Automatically export the results as a single file for quick upload to Ingenuity Pathway Analysis (IPA) as a single dataset.
 
 ## Requirements:
 
-* `r Rversion$version.string`
-* [RStudio v1.4 or greater](https://www.rstudio.com/products/rstudio/)
-* [pandoc](https://pandoc.org/installing.html) 
+-   `r Rversion$version.string`
+-   [RStudio v1.4 or greater](https://www.rstudio.com/products/rstudio/)
+-   [pandoc](https://pandoc.org/installing.html)
 
 In addition, the user must install the following R packages:
-* rmarkdown_2.9
-* knitr_1.33
 
+-   rmarkdown_2.9
+-   knitr_1.33
 
 ## Installation
 
@@ -116,26 +123,24 @@ Finally, the user is highly encouraged to fill in the details for their particul
 
 This directory contains an analysis of....
 
-The experiments were performed by ______ in the lab of ____.
+The experiments were performed by \_\_\_\_\_\_ in the lab of \_\_\_\_.
 
-The full analysis for this study can be found on_____
+The full analysis for this study can be found on\_\_\_\_\_
 
-This analysis was version controlled as a GitHub repository, and can be accessed at the following url [](). Updates to this analysis will be tracked at the this location. For access to this repository, please reach out to ______.
+This analysis was version controlled as a GitHub repository, and can be accessed at the following url . Updates to this analysis will be tracked at the this location. For access to this repository, please reach out to \_\_\_\_\_\_.
 
 ## Lead contact(s):
 
-* [Andrew J. Davis, PhD: 88adavis@gmail.com](mailto:88adavis@gmail.com)
-* ....
-
+-   [Andrew J. Davis, PhD: 88adavis\@gmail.com](mailto:88adavis@gmail.com)
+-   ....
 
 ## Metadata:
 
 Metadata associated with this analysis can be found in the [Metadata](Metadata) folder. Note that the contents of this folder will not be tracked by the remote repository by default (these files tend to be large to store on GitHub). To track the contents of this folder, one must remove the line "/Metadata/" from the [.gitignore](.gitignore) file.
 
-
 ## Input Data
 
-The input data was acquired from ______ on  0/0/0000. Note that the contents of this folder will not be tracked by the remote repository by default (these files tend to be large to store on GitHub). To track the contents of this folder, one must remove the line "/Input/" from the [.gitignore](.gitignore) file.
+The input data was acquired from \_\_\_\_\_\_ on 0/0/0000. Note that the contents of this folder will not be tracked by the remote repository by default (these files tend to be large to store on GitHub). To track the contents of this folder, one must remove the line "/Input/" from the [.gitignore](.gitignore) file.
 
 ## Analysis pipeline:
 
@@ -148,15 +153,14 @@ The input data was acquired from ______ on  0/0/0000. Note that the contents of 
 
 ## Mechanics:
 
-To run this analysis, first create/clean the results output folder by running the codes in [95_Make_Clean.Rmd](). Subsequently, run the code chunks in [99_Run_All.Rmd](R_scripts/99_Run_All.Rmd). This will run the Rmarkdown (.Rmd) files containing the actual code for this analysis in numerical order (i.e., 1.03_Gather-and-Tidy-Data.Rmd, followed by 2.03_Downstream_Analysis.Rmd). Note that one must modify the variable "files_in_r_to_run" in [99_Run_All.Rmd](R_scripts/99_Run_All.Rmd) if one edits or add/deletes filenames of .Rmd scripts associated with this analysis. 
+To run this analysis, first create/clean the results output folder by running the codes in [95_Make_Clean.Rmd](). Subsequently, run the code chunks in [99_Run_All.Rmd](R_scripts/99_Run_All.Rmd). This will run the Rmarkdown (.Rmd) files containing the actual code for this analysis in numerical order (i.e., 1.03_Gather-and-Tidy-Data.Rmd, followed by 2.03_Downstream_Analysis.Rmd). Note that one must modify the variable "files_in_r\_to_run" in [99_Run_All.Rmd](R_scripts/99_Run_All.Rmd) if one edits or add/deletes filenames of .Rmd scripts associated with this analysis.
 
 Running [99_Run_All.Rmd](R_scripts/99_Run_All.Rmd) will also render html files of each .Rmd file, which will be saved to the results folder, making useful reports of this analysis. Finally, this README.Rmd files will also be knitted to an html file, as well as a markdown (.md) file, in the working directory of this repository. This markdown file makes for easy viewing on GitHub, and acts as the "home page" for this repo.
-
 
 ## Output:
 
 The resulting output files were saved to the [Results](Results) folder in this repository. Note that the contents of this folder will not be tracked by the remote repository by default (these files tend to be large to store on GitHub). To track the contents of this folder, one must remove the line "/Results/" from the [.gitignore](.gitignore) file.
- 
+
 ```{r, echo=FALSE}
 list.files(path="Results")
 ```
@@ -176,14 +180,13 @@ Describe any and all major insights generated from this analysis here....
 
 Presentations and reports shared with other members of our team are stored in [Presentations_Reports](Presentations_Reports). Note that the contents of this folder will not be tracked by the remote repository by default (as these files tend to be large to store on GitHub). To track the contents of this folder, one must remove the line "/Presentations_Reports/" from the [.gitignore](.gitignore) file.
 
-
 ## To do list:
 
-1. 
-...
+1.  ...
 
 ## Template used:
-This repository was generated from [10adavis/RNAseq_GSEA_Flow `r RNAseq_GSEA_Flow_version`](`r RNAseq_GSEA_Flow_URL`). 
+
+This repository was generated from [10adavis/DESeq2_fGSEA_Flow `r DESeq2_fGSEA_Flow_version`](https://github.com/10adavis/DESeq2_fGSEA_Flow).
 
 ### Session information
 
@@ -192,7 +195,3 @@ sessionInfo()
 ```
 
 This document was processed on: `r Sys.Date()`.
-
-
-
-
