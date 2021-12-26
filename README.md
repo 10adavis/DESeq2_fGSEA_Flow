@@ -47,8 +47,8 @@ It is expected that this pipeline will be run on user provided data, in an itera
 4.  Reminds you to capture essential metadata, in a consistent format, in this readme file - simply fill in the blanks in the pre-drafted report below.
 5.  Can be run on a typical PC, on most operating systems, including Windows, Mac, and Linux, for free.
 6.  Developed and shared as a fully open source, version controlled repository using GitHub, the most popular code hosting platform for version control and collaboration.
-7.  Generate comprehensive html reports that can be easily shared with stakeholders and captured in ELN reports.
-8.  Analyses can be quickly and easily reproduced by any other user when used in conjunction with git and GitHub. 9. Automatically export the results as a single file for quick upload to Ingenuity Pathway Analysis (IPA) as a single dataset.
+7.  Analyses can be quickly and easily reproduced by any other user when used in conjunction with git and GitHub. 
+8. Automatically export the results as a single file for quick upload to Ingenuity Pathway Analysis (IPA) as a single dataset.
 
 ## Requirements:
 
@@ -205,12 +205,12 @@ sessionInfo()
 #> [1] stats     graphics  grDevices datasets  utils     methods   base     
 #> 
 #> other attached packages:
-#> [1] rmarkdown_2.11 here_1.0.1    
+#> [1] gitcreds_0.1.1 rmarkdown_2.11 here_1.0.1    
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] digest_0.6.29       rprojroot_2.0.2     magrittr_2.0.1      evaluate_0.14       stringi_1.7.6       rlang_0.4.12        renv_0.14.0        
-#>  [8] jquerylib_0.1.4     tools_4.1.2         stringr_1.4.0       tinytex_0.35        xfun_0.29           yaml_2.2.1          fastmap_1.1.0      
-#> [15] compiler_4.1.2      BiocManager_1.30.16 htmltools_0.5.2     knitr_1.37
+#>  [1] digest_0.6.29       rprojroot_2.0.2     magrittr_2.0.1      evaluate_0.14       stringi_1.7.6       rlang_0.4.12       
+#>  [7] renv_0.14.0         jquerylib_0.1.4     tools_4.1.2         stringr_1.4.0       tinytex_0.35        xfun_0.29          
+#> [13] yaml_2.2.1          fastmap_1.1.0       compiler_4.1.2      BiocManager_1.30.16 htmltools_0.5.2     knitr_1.37
 ```
 
 This document was processed on: 2021-12-26.

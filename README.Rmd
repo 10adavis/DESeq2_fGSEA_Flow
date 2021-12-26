@@ -57,8 +57,8 @@ It is expected that this pipeline will be run on user provided data, in an itera
 4.  Reminds you to capture essential metadata, in a consistent format, in this readme file - simply fill in the blanks in the pre-drafted report below.
 5.  Can be run on a typical PC, on most operating systems, including Windows, Mac, and Linux, for free.
 6.  Developed and shared as a fully open source, version controlled repository using GitHub, the most popular code hosting platform for version control and collaboration.
-7.  Generate comprehensive html reports that can be easily shared with stakeholders and captured in ELN reports.
-8.  Analyses can be quickly and easily reproduced by any other user when used in conjunction with git and GitHub. 9. Automatically export the results as a single file for quick upload to Ingenuity Pathway Analysis (IPA) as a single dataset.
+7.  Analyses can be quickly and easily reproduced by any other user when used in conjunction with git and GitHub. 
+8. Automatically export the results as a single file for quick upload to Ingenuity Pathway Analysis (IPA) as a single dataset.
 
 ## Requirements:
 
