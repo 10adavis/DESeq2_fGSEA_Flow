@@ -34,8 +34,8 @@ normalized_counts_anno<-normalized_counts_anno[!duplicated(normalized_counts_ann
 normalized_counts_anno<-as.data.frame(normalized_counts_anno[,c(ncol(normalized_counts_anno),1:(ncol(normalized_counts_anno)-2))])
 row.names(normalized_counts_anno)<-normalized_counts_anno$SYMBOL
 normalized_counts_anno<-normalized_counts_anno[,c(2:ncol(normalized_counts_anno))]
-# Subset for Rejuvenation genes of interest:
-genes_of_interest<-c("TP63","TP53","KRT5")
+# Subset for genes of interest (significant genes by default)
+genes_of_interest<-subset(anno_results[[1]]$gene_name,anno_results[[1]]$adj.P.Val<0.1)
 normalized_counts_anno_GOI<-normalized_counts_anno[match(genes_of_interest, row.names(normalized_counts_anno)), ]
 par(cex.main=10)
 mat=data.matrix(normalized_counts_anno_GOI)

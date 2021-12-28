@@ -25,7 +25,7 @@ library(rlist)
 ## Creating the DeSeq2 object:
 First, the user needs to set the design of the model:
 ```{r}
-dds <- DESeqDataSetFromMatrix(countData = counts, colData = metadata, design = ~ Treatment)
+dds <- DESeqDataSetFromMatrix(countData = counts_sort, colData = metadata, design = ~ subject + group)
 ```
 
 ## Set contrasts
@@ -34,8 +34,8 @@ One then needs to set the contrasts as follows. Each comparison should be set to
 2. The name of the numerator level for the fold change
 3. The name of the denominator level for the fold change.
 ```{r}
-comparison_1<-c("", "", "")
-comparisons<-list(comparison_1,comparison_2)
+comparison_1<-c("group", "anti_PDL_treated_tumor", "baseline_tumor")
+comparisons<-list(comparison_1)
 ```
 
 ## Count normalization

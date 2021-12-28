@@ -43,12 +43,12 @@ write.csv(res_all,"../IPA/Merged_Treatment_Comparisons_DESeq2_Results.csv")
 
 ## Generate DEG summary table:
 ```{r DEG_tables}
-DEG_columns<-c("Comparison","Total DEGs (adjP<0.05)","Upregulated genes (logFC>0, adjP<0.05)","Downregulated genes (logFC<0, adjP<0.05)")
+DEG_columns<-c("Comparison","Total DEGs (adjP<0.1)","Upregulated genes (logFC>0, adjP<0.1)","Downregulated genes (logFC<0, adjP<0.1)")
 # for loop
 DEG_sig<-as.list(0)
 DEG_row<-as.list(0)
 for (i in 1:length(anno_results)){
-DEG_sig[[i]]<-subset(anno_results[[i]],anno_results[[i]]$adj.P.Val<0.05)
+DEG_sig[[i]]<-subset(anno_results[[i]],anno_results[[i]]$adj.P.Val<0.1)
 DEG_row[[i]]<-c(as.character(new_names[i]),length(DEG_sig[[i]]$logFC),length((subset(DEG_sig[[i]],DEG_sig[[i]]$logFC>0)$logFC)),length(subset(DEG_sig[[i]],DEG_sig[[i]]$logFC<0)$logFC))
 }
 DEG_table<-list.rbind(DEG_row)

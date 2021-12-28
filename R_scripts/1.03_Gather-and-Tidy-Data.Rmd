@@ -19,14 +19,21 @@ This table should be a csv file, where the first column corresponds to gene name
 
 ### Read in counts
 ```{r}
-counts<-read.csv('../test_data/example_counts.csv',header=TRUE,row.names = 1)
+counts_1<-read.table('../Input/anti-PDL-treated-tumor_gene_count.tsv',header=TRUE,row.names = 1)
+counts_2 <- read.table("../Input/baseline_tumor_gene_count.tsv",header=TRUE,row.names = 1)
+counts<-merge(counts_1,counts_2,by="row.names")
 head(counts)
+
+counts_sort<-counts[,order(colnames(counts))]
+
+row.names(counts_sort)<-counts_sort$Row.names
+counts_sort<-counts_sort[,c(2:11)]
 ```
 
 ### Read in metadata:
 ```{r}
 # Create data frame
-metadata <- read.csv("../test_data/example_metadata.csv",row.names=1)
+metadata <- read.table("../Input/metadata.tsv",row.names=1,header=TRUE)
 head(metadata)
 ```
 
@@ -34,7 +41,7 @@ head(metadata)
 The row names of the metadata needs to be in the same order of the colnames of your raw counts data.
 ```{r}
 # This can be checked with: 
-all(rownames(metadata) == colnames(counts))
+all(rownames(metadata) == colnames(counts_sort))
 ```
 
 ### Next step: 

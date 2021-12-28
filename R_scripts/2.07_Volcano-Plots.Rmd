@@ -14,6 +14,7 @@ In this script the user will generate volcano plots for each comparison results 
 # Load dependencies:
 library('ggplot2')
 library('EnhancedVolcano')
+library(magrittr)
 ```
 
 ### Plot volcanoes:
@@ -23,18 +24,28 @@ The following function takes 2 input arguments:
   
 Note that the x and y axes limits may need to be modified depending on the DE results for your particular experiment
 ```{r volcano_function}
+##identify max p-value and log2FC in comparisons:
+adjP_vals<-lapply(anno_results,function(i) i[,7]) %>% do.call(cbind,.) %>% data.frame
+logFC<-lapply(anno_results,function(i) i[,4]) %>% do.call(cbind,.) %>% data.frame
+
+
+min_adjP<-min(adjP_vals[,1],na.rm=TRUE)
+min_adjP<--log(min_adjP,base=10)
+max_logFC<-max(logFC[,1],na.rm=TRUE)
+min_logFC<-min(logFC[,1],na.rm=TRUE)
+
 plot_volcano <- function(DEGs,filenames){
-pdf(sprintf("../Results/%s_volcano_padj-0.05_log2FC-1.pdf",filenames), height=8, width=8)
+pdf(sprintf("../Results/%s_volcano_padj-0.1_log2FC-1.pdf",filenames), height=8, width=8)
   volcano <- EnhancedVolcano(DEGs,
         lab = DEGs$gene_name,
         x = 'logFC',
         y = 'adj.P.Val',
         xlab = bquote(~Log[2]~ "fold change"),
         ylab = bquote(~-Log[10]~adjusted~italic(P)),
-        pCutoff = 0.05,
+        pCutoff = 0.1,
         FCcutoff = 1,
-        xlim=c(-5,5),
-        ylim=c(-0.1,50),
+        xlim=c((min_logFC-2),(max_logFC+2)),
+        ylim=c(-0.1,(min_adjP+2)),
         colAlpha = 1,
         legendPosition = "bottom",
         legendLabSize = 14,
