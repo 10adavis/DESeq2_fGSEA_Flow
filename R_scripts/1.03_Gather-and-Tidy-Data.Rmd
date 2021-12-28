@@ -19,21 +19,14 @@ This table should be a csv file, where the first column corresponds to gene name
 
 ### Read in counts
 ```{r}
-counts_1<-read.table('../Input/anti-PDL-treated-tumor_gene_count.tsv',header=TRUE,row.names = 1)
-counts_2 <- read.table("../Input/baseline_tumor_gene_count.tsv",header=TRUE,row.names = 1)
-counts<-merge(counts_1,counts_2,by="row.names")
+counts<-read.table('../Example_data/counts.tsv',header=TRUE,row.names = 1)
 head(counts)
-
-counts_sort<-counts[,order(colnames(counts))]
-
-row.names(counts_sort)<-counts_sort$Row.names
-counts_sort<-counts_sort[,c(2:11)]
 ```
 
 ### Read in metadata:
 ```{r}
 # Create data frame
-metadata <- read.table("../Input/metadata.tsv",row.names=1,header=TRUE)
+metadata <- read.table("../Example_data/metadata.tsv",row.names=1,header=TRUE)
 head(metadata)
 ```
 

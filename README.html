@@ -446,18 +446,18 @@ pre code {
 <pre class="r"><code>renv::snapshot()</code></pre>
 <div id="modifying-input-datasets-and-setting-deseq2-design" class="section level3">
 <h3>Modifying input datasets and setting DESEq2 design:</h3>
-<p>By default this pipeline will run on the example RNA-seq data in the <a href="test_data">test_data</a> folder.</p>
+<p>By default this pipeline will run on the example RNA-seq data in the <a href="Example_data">Example_data</a> folder.</p>
 <p>In order to run this pipeline on your data please add your counts and metadata (both as .csv files) to the <a href="../Input">Input</a> folder. For a more detailed description of the file formatting requirements, see the instructions in <a href="R_scripts/1.03_Gather-and-Tidy-Data.Rmd">1.03_Gather-and-Tidy-Data.Rmd</a>. One will have to modify the directory paths to the counts and metadata files in <a href="R_scripts/1.03_Gather-and-Tidy-Data.Rmd">1.03_Gather-and-Tidy-Data.Rmd</a>.</p>
-<p>The user will also have to specify the design of the DESeq2 model (in <a href="R_scripts/2.03-DESeq2.Rmd">2.03-DESeq2.Rmd</a>) which includes specifying the factors of interest. For example, the default model includes a simple design, where we measure the effect of the Treatment.</p>
-<pre class="r"><code>dds &lt;- DESeqDataSetFromMatrix(countData = counts, colData = metadata, design = ~ Treatment)</code></pre>
-<p>The user will also have to specify the specific contrasts that they want to perform. By default the model runs 1 comparison: “” vs “”</p>
+<p>The user will also have to specify the design of the DESeq2 model (in <a href="R_scripts/2.03-DESeq2.Rmd">2.03-DESeq2.Rmd</a>) which includes specifying the factors of interest. For example, the default model includes a simple multifactor design, where we measure the effect of the Treatment, controlling for the subject effect.</p>
+<pre class="r"><code>dds &lt;- DESeqDataSetFromMatrix(countData = counts, colData = metadata, design = ~ subject + group)</code></pre>
+<p>The user will also have to specify the specific contrasts that they want to perform. By default the model runs 1 comparison: “anti_PDL_treated_tumor” vs “baseline_tumor”</p>
 <p>To extract results for your particular dataset, modify/add these comparison_ variables. Each comparison should be set to a variable (e.g., comparison_1), which equals a character vector, consisting of 3 character strings:</p>
 <ol style="list-style-type: decimal">
 <li>The first string needs to correspond to the factor in design formula</li>
 <li>The name of the numerator level for the fold change</li>
 <li>The name of the denominator level for the fold change.</li>
 </ol>
-<pre class="r"><code>comparison_1&lt;-c(&quot;Treatment&quot;, &quot;&quot;, &quot;&quot;)
+<pre class="r"><code>comparison_1&lt;-c(&quot;Treatment&quot;, &quot;anti_PDL_treated_tumor&quot;, &quot;baseline_tumor&quot;)
 # The comparisons then need to be merged into a &quot;list&quot;
 comparisons&lt;-list(comparison_1)</code></pre>
 </div>
@@ -566,38 +566,34 @@ comparisons&lt;-list(comparison_1)</code></pre>
 #&gt; [1] stats4    stats     graphics  grDevices datasets  utils     methods   base     
 #&gt; 
 #&gt; other attached packages:
-#&gt;  [1] genefilter_1.76.0           gplots_3.1.1                msigdbr_7.4.1               biomartr_0.9.2             
-#&gt;  [5] data.table_1.14.2           GSEABase_1.56.0             graph_1.72.0                annotate_1.72.0            
-#&gt;  [9] XML_3.99-0.8                reactome.db_1.77.0          GO.db_3.14.0                fgsea_1.20.0               
-#&gt; [13] dplyr_1.0.7                 rlist_0.4.6.2               pheatmap_1.0.12             org.Hs.eg.db_3.14.0        
-#&gt; [17] AnnotationDbi_1.56.2        readxl_1.3.1                ashr_2.2-47                 DESeq2_1.34.0              
-#&gt; [21] SummarizedExperiment_1.24.0 Biobase_2.54.0              MatrixGenerics_1.6.0        matrixStats_0.61.0         
-#&gt; [25] GenomicRanges_1.46.1        GenomeInfoDb_1.30.0         IRanges_2.28.0              S4Vectors_0.32.3           
-#&gt; [29] BiocGenerics_0.40.0         rmarkdown_2.11              here_1.0.1                  magrittr_2.0.1             
-#&gt; [33] EnhancedVolcano_1.12.0      ggrepel_0.9.1               ggplot2_3.3.5              
+#&gt;  [1] gitcreds_0.1.1              genefilter_1.76.0           gplots_3.1.1                msigdbr_7.4.1               biomartr_0.9.2             
+#&gt;  [6] data.table_1.14.2           GSEABase_1.56.0             graph_1.72.0                annotate_1.72.0             XML_3.99-0.8               
+#&gt; [11] reactome.db_1.77.0          GO.db_3.14.0                fgsea_1.20.0                dplyr_1.0.7                 rlist_0.4.6.2              
+#&gt; [16] pheatmap_1.0.12             org.Hs.eg.db_3.14.0         AnnotationDbi_1.56.2        readxl_1.3.1                ashr_2.2-47                
+#&gt; [21] DESeq2_1.34.0               SummarizedExperiment_1.24.0 Biobase_2.54.0              MatrixGenerics_1.6.0        matrixStats_0.61.0         
+#&gt; [26] GenomicRanges_1.46.1        GenomeInfoDb_1.30.0         IRanges_2.28.0              S4Vectors_0.32.3            BiocGenerics_0.40.0        
+#&gt; [31] rmarkdown_2.11              here_1.0.1                  magrittr_2.0.1              EnhancedVolcano_1.12.0      ggrepel_0.9.1              
+#&gt; [36] ggplot2_3.3.5              
 #&gt; 
 #&gt; loaded via a namespace (and not attached):
-#&gt;   [1] fastmatch_1.1-3        BiocFileCache_2.2.0    splines_4.1.2          BiocParallel_1.28.3    digest_0.6.29         
-#&gt;   [6] invgamma_1.1           htmltools_0.5.2        SQUAREM_2021.1         fansi_0.5.0            memoise_2.0.1         
-#&gt;  [11] Biostrings_2.62.0      extrafont_0.17         extrafontdb_1.0        prettyunits_1.1.1      colorspace_2.0-2      
-#&gt;  [16] blob_1.2.2             rappdirs_0.3.3         xfun_0.29              crayon_1.4.2           RCurl_1.98-1.5        
-#&gt;  [21] survival_3.2-13        glue_1.6.0             gtable_0.3.0           zlibbioc_1.40.0        XVector_0.34.0        
-#&gt;  [26] DelayedArray_0.20.0    proj4_1.0-10.1         Rttf2pt1_1.3.9         maps_3.4.0             scales_1.1.1          
-#&gt;  [31] DBI_1.1.2              Rcpp_1.0.7             xtable_1.8-4           progress_1.2.2         bit_4.0.4             
-#&gt;  [36] truncnorm_1.0-8        httr_1.4.2             RColorBrewer_1.1-2     ellipsis_0.3.2         pkgconfig_2.0.3       
-#&gt;  [41] farver_2.1.0           dbplyr_2.1.1           locfit_1.5-9.4         utf8_1.2.2             tidyselect_1.1.1      
-#&gt;  [46] labeling_0.4.2         rlang_0.4.12           munsell_0.5.0          cellranger_1.1.0       tools_4.1.2           
-#&gt;  [51] cachem_1.0.6           cli_3.1.0              generics_0.1.1         RSQLite_2.2.9          evaluate_0.14         
-#&gt;  [56] stringr_1.4.0          fastmap_1.1.0          yaml_2.2.1             babelgene_21.4         knitr_1.37            
-#&gt;  [61] bit64_4.0.5            caTools_1.18.2         purrr_0.3.4            KEGGREST_1.34.0        ash_1.0-15            
-#&gt;  [66] ggrastr_1.0.1          xml2_1.3.3             biomaRt_2.50.1         compiler_4.1.2         beeswarm_0.4.0        
-#&gt;  [71] filelock_1.0.2         curl_4.3.2             png_0.1-7              tibble_3.1.6           geneplotter_1.72.0    
-#&gt;  [76] stringi_1.7.6          highr_0.9              ggalt_0.4.0            lattice_0.20-45        Matrix_1.4-0          
-#&gt;  [81] vctrs_0.3.8            pillar_1.6.4           lifecycle_1.0.1        BiocManager_1.30.16    jquerylib_0.1.4       
-#&gt;  [86] bitops_1.0-7           irlba_2.3.5            R6_2.5.1               renv_0.14.0            KernSmooth_2.23-20    
-#&gt;  [91] gridExtra_2.3          vipor_0.4.5            MASS_7.3-54            gtools_3.9.2           assertthat_0.2.1      
-#&gt;  [96] rprojroot_2.0.2        withr_2.4.3            GenomeInfoDbData_1.2.7 parallel_4.1.2         hms_1.1.1             
-#&gt; [101] grid_4.1.2             mixsqp_0.3-43          ggbeeswarm_0.6.0</code></pre>
+#&gt;   [1] fastmatch_1.1-3        BiocFileCache_2.2.0    splines_4.1.2          BiocParallel_1.28.3    digest_0.6.29          invgamma_1.1          
+#&gt;   [7] htmltools_0.5.2        SQUAREM_2021.1         fansi_0.5.0            memoise_2.0.1          Biostrings_2.62.0      extrafont_0.17        
+#&gt;  [13] extrafontdb_1.0        prettyunits_1.1.1      colorspace_2.0-2       blob_1.2.2             rappdirs_0.3.3         xfun_0.29             
+#&gt;  [19] crayon_1.4.2           RCurl_1.98-1.5         survival_3.2-13        glue_1.6.0             gtable_0.3.0           zlibbioc_1.40.0       
+#&gt;  [25] XVector_0.34.0         DelayedArray_0.20.0    proj4_1.0-10.1         Rttf2pt1_1.3.9         maps_3.4.0             scales_1.1.1          
+#&gt;  [31] DBI_1.1.2              Rcpp_1.0.7             xtable_1.8-4           progress_1.2.2         bit_4.0.4              truncnorm_1.0-8       
+#&gt;  [37] httr_1.4.2             RColorBrewer_1.1-2     ellipsis_0.3.2         pkgconfig_2.0.3        farver_2.1.0           dbplyr_2.1.1          
+#&gt;  [43] locfit_1.5-9.4         utf8_1.2.2             tidyselect_1.1.1       labeling_0.4.2         rlang_0.4.12           munsell_0.5.0         
+#&gt;  [49] cellranger_1.1.0       tools_4.1.2            cachem_1.0.6           cli_3.1.0              generics_0.1.1         RSQLite_2.2.9         
+#&gt;  [55] evaluate_0.14          stringr_1.4.0          fastmap_1.1.0          yaml_2.2.1             babelgene_21.4         knitr_1.37            
+#&gt;  [61] bit64_4.0.5            caTools_1.18.2         purrr_0.3.4            KEGGREST_1.34.0        ash_1.0-15             ggrastr_1.0.1         
+#&gt;  [67] xml2_1.3.3             biomaRt_2.50.1         compiler_4.1.2         beeswarm_0.4.0         filelock_1.0.2         curl_4.3.2            
+#&gt;  [73] png_0.1-7              tibble_3.1.6           geneplotter_1.72.0     stringi_1.7.6          highr_0.9              ggalt_0.4.0           
+#&gt;  [79] lattice_0.20-45        Matrix_1.4-0           vctrs_0.3.8            pillar_1.6.4           lifecycle_1.0.1        BiocManager_1.30.16   
+#&gt;  [85] jquerylib_0.1.4        bitops_1.0-7           irlba_2.3.5            R6_2.5.1               renv_0.14.0            KernSmooth_2.23-20    
+#&gt;  [91] gridExtra_2.3          vipor_0.4.5            MASS_7.3-54            gtools_3.9.2           assertthat_0.2.1       rprojroot_2.0.2       
+#&gt;  [97] withr_2.4.3            GenomeInfoDbData_1.2.7 parallel_4.1.2         hms_1.1.1              grid_4.1.2             mixsqp_0.3-43         
+#&gt; [103] ggbeeswarm_0.6.0</code></pre>
 <p>This document was processed on: 2021-12-28.</p>
 </div>
 </div>

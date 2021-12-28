@@ -43,10 +43,6 @@ By default this pipeline will run on the example RNA-seq data in the [test_data]
 
 This data consists of RNA-seq data generated in the following study: [Interferon Receptor Signaling Pathways Regulating PD-L1 and PD-L2 Expression. A. Garcia-Diaz, et al. 2017. Cell Reports](https://www.cell.com/cell-reports/fulltext/S2211-1247(17)30525-9?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS2211124717305259%3Fshowall%3Dtrue#secsectitle0035) and deposited on GEO, here: [GSE96619](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE96619).
 
-
-
-
-
 It is expected that this pipeline will be run on user provided data, in an iterative manner, with the user modifying the Rmarkdown scripts in folder [R_Scripts](R_Scripts).To do so, the user needs to input 1) Raw count data and 2) Associated sample metadata. It is expected that the user has a thorough understanding of RNA-seq and DESeq2 [M. Love, W. Huber, S. Anders. Genome Biology. 2014](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0550-8).
 
 ## Reasons to use RNAseq_GSEA_Flow:
@@ -91,17 +87,17 @@ renv::snapshot()
 
 ### Modifying input datasets and setting DESEq2 design:
 
-By default this pipeline will run on the example RNA-seq data in the [test_data](test_data) folder.
+By default this pipeline will run on the example RNA-seq data in the [Example_data](Example_data) folder.
 
 In order to run this pipeline on your data please add your counts and metadata (both as .csv files) to the [Input](../Input) folder. For a more detailed description of the file formatting requirements, see the instructions in [1.03_Gather-and-Tidy-Data.Rmd](R_scripts/1.03_Gather-and-Tidy-Data.Rmd). One will have to modify the directory paths to the counts and metadata files in [1.03_Gather-and-Tidy-Data.Rmd](R_scripts/1.03_Gather-and-Tidy-Data.Rmd).
 
-The user will also have to specify the design of the DESeq2 model (in [2.03-DESeq2.Rmd](R_scripts/2.03-DESeq2.Rmd)) which includes specifying the factors of interest. For example, the default model includes a simple design, where we measure the effect of the Treatment.
+The user will also have to specify the design of the DESeq2 model (in [2.03-DESeq2.Rmd](R_scripts/2.03-DESeq2.Rmd)) which includes specifying the factors of interest. For example, the default model includes a simple multifactor design, where we measure the effect of the Treatment, controlling for the subject effect.
 
 ```{r eval=FALSE, message=FALSE, warning=FALSE}
-dds <- DESeqDataSetFromMatrix(countData = counts, colData = metadata, design = ~ Treatment)
+dds <- DESeqDataSetFromMatrix(countData = counts, colData = metadata, design = ~ subject + group)
 ```
 
-The user will also have to specify the specific contrasts that they want to perform. By default the model runs 1 comparison: "" vs ""
+The user will also have to specify the specific contrasts that they want to perform. By default the model runs 1 comparison: "anti_PDL_treated_tumor" vs "baseline_tumor"
 
 To extract results for your particular dataset, modify/add these comparison\_ variables. Each comparison should be set to a variable (e.g., comparison_1), which equals a character vector, consisting of 3 character strings:
 
@@ -110,7 +106,7 @@ To extract results for your particular dataset, modify/add these comparison\_ va
 3.  The name of the denominator level for the fold change.
 
 ```{r eval=FALSE, message=FALSE, warning=FALSE}
-comparison_1<-c("Treatment", "", "")
+comparison_1<-c("Treatment", "anti_PDL_treated_tumor", "baseline_tumor")
 # The comparisons then need to be merged into a "list"
 comparisons<-list(comparison_1)
 ```

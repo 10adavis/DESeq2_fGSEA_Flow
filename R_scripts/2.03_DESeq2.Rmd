@@ -25,7 +25,7 @@ library(rlist)
 ## Creating the DeSeq2 object:
 First, the user needs to set the design of the model:
 ```{r}
-dds <- DESeqDataSetFromMatrix(countData = counts_sort, colData = metadata, design = ~ subject + group)
+dds <- DESeqDataSetFromMatrix(countData = counts, colData = metadata, design = ~ subject + group)
 ```
 
 ## Set contrasts
