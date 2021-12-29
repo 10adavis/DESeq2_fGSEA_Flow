@@ -22,7 +22,6 @@ DESeq2_fGSEA_Flow_URL<-"https://github.com/10adavis/DESeq2_fGSEA_Flow /releases/
 DESeq2_fGSEA_Flow `r DESeq2_fGSEA_Flow_version`
 
 ## Introduction
-
 DESeq2_fGSEA_Flow has been produced to provide a standardized RNA-seq analysis pipeline.
 
 This pipeline utilizes [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) and [fGSEA](https://bioconductor.org/packages/release/bioc/html/fgsea.html) R packages to generate the following outputs:
