@@ -1,7 +1,7 @@
 ---
 title: "Enter analysis name here"
 author: "Andrew J. Davis, Ph.D."
-date: "28 December 2021"
+date: "29 December 2021"
 output:
   rmarkdown::html_document:
     toc: TRUE
@@ -153,27 +153,17 @@ The resulting output files were saved to the [Results](Results) folder in this r
 
 
 ```
-#>  [1] "1.03_Gather-and-Tidy-Data.html"                                        
-#>  [2] "2.03_DESeq2.html"                                                      
-#>  [3] "2.07_Volcano-Plots.html"                                               
-#>  [4] "3.03_GSEA.html"                                                        
-#>  [5] "4.03_Export-to-IPA.html"                                               
-#>  [6] "5.03_Gene-Heatmaps.html"                                               
-#>  [7] "anti_PDL_treated_tumor_vs_baseline_tumor_DESeq2.csv"                   
-#>  [8] "anti_PDL_treated_tumor_vs_baseline_tumor_pvalue_histogram.tiff"        
-#>  [9] "anti_PDL_treated_tumor_vs_baseline_tumor_volcano_padj-0.1_log2FC-1.pdf"
-#> [10] "DEG_Summary_Table.csv"                                                 
-#> [11] "DESeq2_dispersions_plot.pdf"                                           
-#> [12] "Filtered_Normalized_Counts.csv"                                        
-#> [13] "Filtered_Raw_Counts.csv"                                               
-#> [14] "GSEA_anti_PDL_treated_tumor_vs_baseline_tumor.csv"                     
-#> [15] "Heatmap_Select_Genes.pdf"                                              
-#> [16] "PCA_PC1-vs-PC2_rlog_ellipses.tiff"                                     
-#> [17] "PCA_PC1-vs-PC2_rlog.tiff"                                              
-#> [18] "PCA_PC1-vs-PC2_VST_ellipses.tiff"                                      
-#> [19] "PCA_PC1-vs-PC2_VST.tiff"                                               
-#> [20] "Sample_Correlation_rlog.pdf"                                           
-#> [21] "Sample_Correlation_VST.pdf"
+#>  [1] "1.03_Gather-and-Tidy-Data.html"                                         "2.03_DESeq2.html"                                                      
+#>  [3] "2.07_Volcano-Plots.html"                                                "3.03_GSEA.html"                                                        
+#>  [5] "4.03_Export-to-IPA.html"                                                "5.03_Gene-Heatmaps.html"                                               
+#>  [7] "anti_PDL_treated_tumor_vs_baseline_tumor_DESeq2.csv"                    "anti_PDL_treated_tumor_vs_baseline_tumor_pvalue_histogram.tiff"        
+#>  [9] "anti_PDL_treated_tumor_vs_baseline_tumor_volcano_padj-0.1_log2FC-1.pdf" "DEG_Summary_Table.csv"                                                 
+#> [11] "DESeq2_dispersions_plot.pdf"                                            "Filtered_Normalized_Counts.csv"                                        
+#> [13] "Filtered_Raw_Counts.csv"                                                "GSEA_anti_PDL_treated_tumor_vs_baseline_tumor.csv"                     
+#> [15] "GSEA_Top-20-Gene-Sets_anti_PDL_treated_tumor_vs_baseline_tumor.pdf"     "Heatmap_Select_Genes.pdf"                                              
+#> [17] "PCA_PC1-vs-PC2_rlog_ellipses.tiff"                                      "PCA_PC1-vs-PC2_rlog.tiff"                                              
+#> [19] "PCA_PC1-vs-PC2_VST_ellipses.tiff"                                       "PCA_PC1-vs-PC2_VST.tiff"                                               
+#> [21] "Sample_Correlation_rlog.pdf"                                            "Sample_Correlation_VST.pdf"
 ```
 
 ## IPA:
@@ -213,42 +203,38 @@ sessionInfo()
 #> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
 #> 
 #> locale:
-#>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C               LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8     LC_MONETARY=en_US.UTF-8   
-#>  [6] LC_MESSAGES=en_US.UTF-8    LC_PAPER=en_US.UTF-8       LC_NAME=C                  LC_ADDRESS=C               LC_TELEPHONE=C            
-#> [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+#>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C               LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8     LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+#>  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                  LC_ADDRESS=C               LC_TELEPHONE=C             LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 #> 
 #> attached base packages:
 #> [1] stats4    stats     graphics  grDevices datasets  utils     methods   base     
 #> 
 #> other attached packages:
-#>  [1] gitcreds_0.1.1              genefilter_1.76.0           gplots_3.1.1                msigdbr_7.4.1               biomartr_0.9.2             
-#>  [6] data.table_1.14.2           GSEABase_1.56.0             graph_1.72.0                annotate_1.72.0             XML_3.99-0.8               
-#> [11] reactome.db_1.77.0          GO.db_3.14.0                fgsea_1.20.0                dplyr_1.0.7                 rlist_0.4.6.2              
-#> [16] pheatmap_1.0.12             org.Hs.eg.db_3.14.0         AnnotationDbi_1.56.2        readxl_1.3.1                ashr_2.2-47                
-#> [21] DESeq2_1.34.0               SummarizedExperiment_1.24.0 Biobase_2.54.0              MatrixGenerics_1.6.0        matrixStats_0.61.0         
-#> [26] GenomicRanges_1.46.1        GenomeInfoDb_1.30.0         IRanges_2.28.0              S4Vectors_0.32.3            BiocGenerics_0.40.0        
-#> [31] rmarkdown_2.11              here_1.0.1                  magrittr_2.0.1              EnhancedVolcano_1.12.0      ggrepel_0.9.1              
-#> [36] ggplot2_3.3.5              
+#>  [1] genefilter_1.76.0           gplots_3.1.1                magrittr_2.0.1              EnhancedVolcano_1.12.0      ggrepel_0.9.1              
+#>  [6] rlist_0.4.6.2               pheatmap_1.0.12             ashr_2.2-47                 DESeq2_1.34.0               SummarizedExperiment_1.24.0
+#> [11] MatrixGenerics_1.6.0        matrixStats_0.61.0          GenomicRanges_1.46.1        GenomeInfoDb_1.30.0         rmarkdown_2.11             
+#> [16] here_1.0.1                  msigdbr_7.4.1               biomartr_0.9.2              data.table_1.14.2           GSEABase_1.56.0            
+#> [21] graph_1.72.0                annotate_1.72.0             XML_3.99-0.8                reactome.db_1.77.0          GO.db_3.14.0               
+#> [26] org.Hs.eg.db_3.14.0         AnnotationDbi_1.56.2        IRanges_2.28.0              S4Vectors_0.32.3            Biobase_2.54.0             
+#> [31] BiocGenerics_0.40.0         fgsea_1.20.0                dplyr_1.0.7                 readxl_1.3.1                scales_1.1.1               
+#> [36] RColorBrewer_1.1-2          ggplot2_3.3.5              
 #> 
 #> loaded via a namespace (and not attached):
-#>   [1] fastmatch_1.1-3        BiocFileCache_2.2.0    splines_4.1.2          BiocParallel_1.28.3    digest_0.6.29          invgamma_1.1          
-#>   [7] htmltools_0.5.2        SQUAREM_2021.1         fansi_0.5.0            memoise_2.0.1          Biostrings_2.62.0      extrafont_0.17        
-#>  [13] extrafontdb_1.0        prettyunits_1.1.1      colorspace_2.0-2       blob_1.2.2             rappdirs_0.3.3         xfun_0.29             
-#>  [19] crayon_1.4.2           RCurl_1.98-1.5         survival_3.2-13        glue_1.6.0             gtable_0.3.0           zlibbioc_1.40.0       
-#>  [25] XVector_0.34.0         DelayedArray_0.20.0    proj4_1.0-10.1         Rttf2pt1_1.3.9         maps_3.4.0             scales_1.1.1          
-#>  [31] DBI_1.1.2              Rcpp_1.0.7             xtable_1.8-4           progress_1.2.2         bit_4.0.4              truncnorm_1.0-8       
-#>  [37] httr_1.4.2             RColorBrewer_1.1-2     ellipsis_0.3.2         pkgconfig_2.0.3        farver_2.1.0           dbplyr_2.1.1          
-#>  [43] locfit_1.5-9.4         utf8_1.2.2             tidyselect_1.1.1       labeling_0.4.2         rlang_0.4.12           munsell_0.5.0         
-#>  [49] cellranger_1.1.0       tools_4.1.2            cachem_1.0.6           cli_3.1.0              generics_0.1.1         RSQLite_2.2.9         
-#>  [55] evaluate_0.14          stringr_1.4.0          fastmap_1.1.0          yaml_2.2.1             babelgene_21.4         knitr_1.37            
-#>  [61] bit64_4.0.5            caTools_1.18.2         purrr_0.3.4            KEGGREST_1.34.0        ash_1.0-15             ggrastr_1.0.1         
-#>  [67] xml2_1.3.3             biomaRt_2.50.1         compiler_4.1.2         beeswarm_0.4.0         filelock_1.0.2         curl_4.3.2            
-#>  [73] png_0.1-7              tibble_3.1.6           geneplotter_1.72.0     stringi_1.7.6          highr_0.9              ggalt_0.4.0           
-#>  [79] lattice_0.20-45        Matrix_1.4-0           vctrs_0.3.8            pillar_1.6.4           lifecycle_1.0.1        BiocManager_1.30.16   
-#>  [85] jquerylib_0.1.4        bitops_1.0-7           irlba_2.3.5            R6_2.5.1               renv_0.14.0            KernSmooth_2.23-20    
-#>  [91] gridExtra_2.3          vipor_0.4.5            MASS_7.3-54            gtools_3.9.2           assertthat_0.2.1       rprojroot_2.0.2       
-#>  [97] withr_2.4.3            GenomeInfoDbData_1.2.7 parallel_4.1.2         hms_1.1.1              grid_4.1.2             mixsqp_0.3-43         
-#> [103] ggbeeswarm_0.6.0
+#>   [1] fastmatch_1.1-3        BiocFileCache_2.2.0    splines_4.1.2          BiocParallel_1.28.3    digest_0.6.29          invgamma_1.1           htmltools_0.5.2       
+#>   [8] SQUAREM_2021.1         fansi_0.5.0            memoise_2.0.1          Biostrings_2.62.0      extrafont_0.17         extrafontdb_1.0        prettyunits_1.1.1     
+#>  [15] colorspace_2.0-2       blob_1.2.2             rappdirs_0.3.3         xfun_0.29              crayon_1.4.2           RCurl_1.98-1.5         survival_3.2-13       
+#>  [22] glue_1.6.0             gtable_0.3.0           zlibbioc_1.40.0        XVector_0.34.0         DelayedArray_0.20.0    proj4_1.0-10.1         Rttf2pt1_1.3.9        
+#>  [29] maps_3.4.0             DBI_1.1.2              Rcpp_1.0.7             xtable_1.8-4           progress_1.2.2         bit_4.0.4              truncnorm_1.0-8       
+#>  [36] httr_1.4.2             ellipsis_0.3.2         pkgconfig_2.0.3        farver_2.1.0           dbplyr_2.1.1           locfit_1.5-9.4         utf8_1.2.2            
+#>  [43] tidyselect_1.1.1       labeling_0.4.2         rlang_0.4.12           munsell_0.5.0          cellranger_1.1.0       tools_4.1.2            cachem_1.0.6          
+#>  [50] cli_3.1.0              generics_0.1.1         RSQLite_2.2.9          evaluate_0.14          stringr_1.4.0          fastmap_1.1.0          yaml_2.2.1            
+#>  [57] babelgene_21.4         knitr_1.37             bit64_4.0.5            caTools_1.18.2         purrr_0.3.4            KEGGREST_1.34.0        ash_1.0-15            
+#>  [64] ggrastr_1.0.1          xml2_1.3.3             biomaRt_2.50.1         compiler_4.1.2         beeswarm_0.4.0         filelock_1.0.2         curl_4.3.2            
+#>  [71] png_0.1-7              tibble_3.1.6           geneplotter_1.72.0     stringi_1.7.6          highr_0.9              ggalt_0.4.0            lattice_0.20-45       
+#>  [78] Matrix_1.4-0           vctrs_0.3.8            pillar_1.6.4           lifecycle_1.0.1        BiocManager_1.30.16    jquerylib_0.1.4        bitops_1.0-7          
+#>  [85] irlba_2.3.5            R6_2.5.1               renv_0.14.0            KernSmooth_2.23-20     gridExtra_2.3          vipor_0.4.5            MASS_7.3-54           
+#>  [92] gtools_3.9.2           assertthat_0.2.1       rprojroot_2.0.2        withr_2.4.3            GenomeInfoDbData_1.2.7 parallel_4.1.2         hms_1.1.1             
+#>  [99] grid_4.1.2             mixsqp_0.3-43          tinytex_0.36           ggbeeswarm_0.6.0
 ```
 
-This document was processed on: 2021-12-28.
+This document was processed on: 2021-12-29.

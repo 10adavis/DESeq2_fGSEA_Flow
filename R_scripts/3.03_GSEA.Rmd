@@ -25,6 +25,7 @@ library('data.table')
 library('biomartr')
 library('annotate')
 library('msigdbr')
+library(scales)
 ```
 
 ## Set random seed
@@ -75,6 +76,24 @@ GSEA_ALL <- function(ranked_DGEs,filename){
   fgseaRes_ex <- fgseaRes
   fgseaRes_ex$leadingEdge <- vapply(fgseaRes_ex$leadingEdge, paste, collapse = ", ", character(1L))
   write.csv((fgseaRes_ex[order(fgseaRes_ex$padj,-abs(fgseaRes_ex$NES)), ]),sprintf("../Results/GSEA_%s.csv",filename))
+  return((fgseaRes_ex[order(fgseaRes_ex$padj,-abs(fgseaRes_ex$NES)), ]))
+}
+
+## Plot top results as bar graph
+GSEA.plot <- function(data, name)
+{
+GSEA_sig<-data[c(1:20),]
+GSEA_sig$pathway <- factor(GSEA_sig$pathway, levels = GSEA_sig$pathway[order(-GSEA_sig$padj)])    
+top_20<-ggplot(GSEA_sig, aes(x=pathway, y=-log(padj,10), fill=NES)) + scale_fill_gradient2(limits=c(-3,3), low=muted("blue"), mid="white",high=muted("red"), space ="Lab", guide="colourbar") +
+      geom_histogram(stat="identity",width=0.8) + labs(title = paste0("Top 20 Enriched Gene Sets"," ",name), x =NULL,y="-log(p-value)",fill="Normalized Enrichment Score") + scale_y_continuous(expand=c(0,0)) +
+      # the following these removeds background, gridlines, etc
+ # the following these removeds background, gridlines, etcGSEA_sig<-GSEA_sig[order(-GSEA_sig$padj),]
+      theme_classic()+
+      coord_flip() # flips the axes
+pdf(sprintf("../Results/GSEA_Top-20-Gene-Sets_%s.pdf",name),width=14,height=8)
+print(top_20)
+dev.off()
+plot(top_20)
 }
 ```
 
@@ -85,7 +104,8 @@ for(i in 1:length(comparisons)){
   # Rank the genes by p-value and log2-FC
 DEG_sort <- rank_DEG(anno_results[[i]])
 # Perform GSEA of the full preranked gene list against Reactome and GO pathways and plot the results
-GSEA_ALL(DEG_sort,paste0(comparisons[[i]][2],"_vs_",comparisons[[i]][3]))
+GSEA_results<-GSEA_ALL(DEG_sort,paste0(comparisons[[i]][2],"_vs_",comparisons[[i]][3]))
+GSEA.plot(GSEA_results,paste0(comparisons[[i]][2],"_vs_",comparisons[[i]][3]))
 }
 ```
 
