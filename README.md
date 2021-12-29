@@ -225,9 +225,9 @@ sessionInfo()
 #> [1] rmarkdown_2.11 here_1.0.1    
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] digest_0.6.29       rprojroot_2.0.2     magrittr_2.0.1      evaluate_0.14       stringi_1.7.6       rlang_0.4.12        renv_0.14.0        
-#>  [8] jquerylib_0.1.4     tools_4.1.2         stringr_1.4.0       tinytex_0.36        xfun_0.29           yaml_2.2.1          fastmap_1.1.0      
-#> [15] compiler_4.1.2      BiocManager_1.30.16 htmltools_0.5.2     knitr_1.37
+#>  [1] digest_0.6.29       rprojroot_2.0.2     magrittr_2.0.1      evaluate_0.14       stringi_1.7.6       rlang_0.4.12       
+#>  [7] renv_0.14.0         jquerylib_0.1.4     tools_4.1.2         stringr_1.4.0       tinytex_0.36        xfun_0.29          
+#> [13] yaml_2.2.1          fastmap_1.1.0       compiler_4.1.2      BiocManager_1.30.16 htmltools_0.5.2     knitr_1.37
 ```
 
 This document was processed on: 2021-12-29.
