@@ -34,7 +34,7 @@ head(metadata)
 The row names of the metadata needs to be in the same order of the colnames of your raw counts data.
 ```{r}
 # This can be checked with: 
-all(rownames(metadata) == colnames(counts_sort))
+all(rownames(metadata) == colnames(counts))
 ```
 
 ### Next step: 
