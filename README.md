@@ -1,7 +1,7 @@
 ---
 title: "Enter analysis name here"
 author: "Andrew J. Davis, Ph.D."
-date: "29 December 2021"
+date: "19 February 2023"
 output:
   rmarkdown::html_document:
     toc: TRUE
@@ -47,7 +47,7 @@ It is expected that this pipeline will be run on user provided data, in an itera
 
 ## Requirements:
 
--   R version 4.1.2 (2021-11-01)
+-   R version 4.2.1 (2022-06-23)
 -   [RStudio v1.4 or greater](https://www.rstudio.com/products/rstudio/)
 -   [pandoc](https://pandoc.org/installing.html)
 
@@ -204,29 +204,78 @@ This repository was generated from [10adavis/DESeq2_fGSEA_Flow v1.0](https://git
 
 ```r
 sessionInfo()
-#> R version 4.1.2 (2021-11-01)
+#> R version 4.2.1 (2022-06-23)
 #> Platform: x86_64-pc-linux-gnu (64-bit)
-#> Running under: Ubuntu 20.04.3 LTS
+#> Running under: Ubuntu 22.04.2 LTS
 #> 
 #> Matrix products: default
-#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
-#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
+#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.10.0
+#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.10.0
 #> 
 #> locale:
-#>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C               LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8     LC_MONETARY=en_US.UTF-8   
-#>  [6] LC_MESSAGES=en_US.UTF-8    LC_PAPER=en_US.UTF-8       LC_NAME=C                  LC_ADDRESS=C               LC_TELEPHONE=C            
+#>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+#>  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+#>  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+#>  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+#>  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
 #> [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 #> 
 #> attached base packages:
-#> [1] stats     graphics  grDevices datasets  utils     methods   base     
+#> [1] stats4    stats     graphics  grDevices datasets  utils     methods   base     
 #> 
 #> other attached packages:
-#> [1] rmarkdown_2.11 here_1.0.1    
+#>  [1] genefilter_1.80.3           gplots_3.1.3               
+#>  [3] msigdbr_7.5.1               scales_1.2.1               
+#>  [5] biomartr_1.0.2              GSEABase_1.60.0            
+#>  [7] graph_1.76.0                annotate_1.76.0            
+#>  [9] XML_3.99-0.13               reactome.db_1.82.0         
+#> [11] GO.db_3.16.0                data.table_1.14.8          
+#> [13] fgsea_1.24.0                dplyr_1.1.0                
+#> [15] magrittr_2.0.3              EnhancedVolcano_1.16.0     
+#> [17] ggrepel_0.9.3               rlist_0.4.6.2              
+#> [19] pheatmap_1.0.12             org.Hs.eg.db_3.16.0        
+#> [21] AnnotationDbi_1.60.0        readxl_1.4.2               
+#> [23] ggplot2_3.4.1               ashr_2.2-54                
+#> [25] DESeq2_1.38.3               SummarizedExperiment_1.28.0
+#> [27] Biobase_2.58.0              MatrixGenerics_1.10.0      
+#> [29] matrixStats_0.63.0          GenomicRanges_1.50.2       
+#> [31] GenomeInfoDb_1.34.9         IRanges_2.32.0             
+#> [33] S4Vectors_0.36.1            BiocGenerics_0.44.0        
+#> [35] rmarkdown_2.20              here_1.0.1                 
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] digest_0.6.29       rprojroot_2.0.2     magrittr_2.0.1      evaluate_0.14       stringi_1.7.6       rlang_0.4.12       
-#>  [7] renv_0.14.0         jquerylib_0.1.4     tools_4.1.2         stringr_1.4.0       tinytex_0.36        xfun_0.29          
-#> [13] yaml_2.2.1          fastmap_1.1.0       compiler_4.1.2      BiocManager_1.30.16 htmltools_0.5.2     knitr_1.37
+#>  [1] colorspace_2.1-0       ellipsis_0.3.2         rprojroot_2.0.3       
+#>  [4] XVector_0.38.0         farver_2.1.1           bit64_4.0.5           
+#>  [7] fansi_1.0.4            xml2_1.3.3             splines_4.2.1         
+#> [10] codetools_0.2-19       cachem_1.0.6           geneplotter_1.76.0    
+#> [13] knitr_1.42             jsonlite_1.8.4         dbplyr_2.3.0          
+#> [16] png_0.1-8              BiocManager_1.30.19    compiler_4.2.1        
+#> [19] httr_1.4.4             assertthat_0.2.1       Matrix_1.5-3          
+#> [22] fastmap_1.1.0          cli_3.6.0              htmltools_0.5.4       
+#> [25] prettyunits_1.1.1      tools_4.2.1            gtable_0.3.1          
+#> [28] glue_1.6.2             GenomeInfoDbData_1.2.9 rappdirs_0.3.3        
+#> [31] fastmatch_1.1-3        Rcpp_1.0.10            cellranger_1.1.0      
+#> [34] jquerylib_0.1.4        vctrs_0.5.2            Biostrings_2.66.0     
+#> [37] babelgene_22.9         xfun_0.37              stringr_1.5.0         
+#> [40] lifecycle_1.0.3        irlba_2.3.5.1          renv_0.16.0           
+#> [43] gtools_3.9.4           zlibbioc_1.44.0        MASS_7.3-58.2         
+#> [46] hms_1.1.2              parallel_4.2.1         RColorBrewer_1.1-3    
+#> [49] yaml_2.3.7             curl_5.0.0             memoise_2.0.1         
+#> [52] sass_0.4.5             biomaRt_2.54.0         stringi_1.7.12        
+#> [55] RSQLite_2.3.0          SQUAREM_2021.1         highr_0.10            
+#> [58] caTools_1.18.2         filelock_1.0.2         BiocParallel_1.32.5   
+#> [61] truncnorm_1.0-8        rlang_1.0.6            pkgconfig_2.0.3       
+#> [64] bitops_1.0-7           evaluate_0.20          lattice_0.20-45       
+#> [67] invgamma_1.1           labeling_0.4.2         cowplot_1.1.1         
+#> [70] bit_4.0.5              tidyselect_1.2.0       R6_2.5.1              
+#> [73] generics_0.1.3         DelayedArray_0.24.0    DBI_1.1.3             
+#> [76] pillar_1.8.1           withr_2.5.0            survival_3.5-3        
+#> [79] KEGGREST_1.38.0        RCurl_1.98-1.10        mixsqp_0.3-48         
+#> [82] tibble_3.1.8           crayon_1.5.2           KernSmooth_2.23-20    
+#> [85] utf8_1.2.3             BiocFileCache_2.6.1    progress_1.2.2        
+#> [88] locfit_1.5-9.7         grid_4.2.1             blob_1.2.3            
+#> [91] digest_0.6.31          xtable_1.8-4           munsell_0.5.0         
+#> [94] bslib_0.4.2
 ```
 
-This document was processed on: 2021-12-29.
+This document was processed on: 2023-02-19.
