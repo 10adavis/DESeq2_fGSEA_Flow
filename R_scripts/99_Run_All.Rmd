@@ -8,11 +8,38 @@ output:
 ---
 
 
-# Install/Load dependencies
+## Install/Load dependencies across all RMD files
+```{r}
+# Set the working directory to the R_scripts directory
+setwd("../R_scripts/")
+
+# Get a list of all the R scripts in the directory
+scripts <- list.files(pattern = "\\.Rmd$")
+
+# Loop through each script and install the dependencies
+for (script in scripts) {
+  # Read the script and extract the dependencies
+  dependencies <- readLines(script)
+  dependencies <- dependencies[grep("^library\\(", dependencies)]
+  dependencies <- gsub("^library\\((.*)\\)$", "\\1", dependencies)
+  
+  # Install the dependencies to the renv library for this repository
+  for (dep in dependencies) {
+    if (startsWith(dep, "Bioc")) {
+      BiocManager::install(dep, update = TRUE, ask = FALSE)
+    } else {
+      install.packages(dep, dependencies = TRUE, lib = "../renv/library")
+    }
+  }
+}
+```
+
+### Load dependencies for this script
 ```{r, echo=TRUE, message=FALSE, Loading_Dependencies_99}
 # Load dependencies:
 library(here)
 library(rmarkdown)
+library(future)
 ```
 
 ```{r Run_all, include=FALSE}
@@ -33,6 +60,47 @@ rmarkdown::render(here("README.Rmd"),
 
 ```
 
+
+```{r}
+# Define the plan for parallel execution
+plan(multisession, workers = 2)
+
+# Define the order of execution
+sequential <- c("1.03_Gather-and-Tidy-Data.Rmd", "2.03_DESeq2.Rmd")
+parallel1 <- c("2.07_Volcano-Plots.Rmd", "3.03_GSEA.Rmd")
+parallel2 <- c("4.03_Export-to-IPA.Rmd", "5.03_Gene-Heatmaps.Rmd")
+
+# Run the Rmd scripts in the defined order
+for (i1 in sequential) {
+  rmarkdown::render(here("R_scripts", i1),
+                    output_format = html_document(html_preview = TRUE, toc = TRUE),
+                    output_dir = here("Results"))
+}
+
+future({
+  for (i1 in parallel1) {
+    rmarkdown::render(here("R_scripts", i1),
+                      output_format = html_document(html_preview = TRUE, toc = TRUE),
+                      output_dir = here("Results"))
+  }
+}, wait = TRUE)
+
+future({
+  for (i1 in parallel2) {
+    rmarkdown::render(here("R_scripts", i1),
+                      output_format = html_document(html_preview = TRUE, toc = TRUE),
+                      output_dir = here("Results"))
+  }
+}, wait = TRUE)
+
+print(here("R_scripts"))
+
+rmarkdown::render(here("README.Rmd"),
+                  output_format =  html_document(html_preview = TRUE, toc = TRUE,keep_md=TRUE),
+                  output_dir = here())
+
+
+```
 
 
 ### Session information
