@@ -31,7 +31,6 @@ for(i1 in 1:length(files_in_r_to_run)){
 rmarkdown::render(here("README.Rmd"),
                   output_format =  html_document(html_preview = TRUE, toc = TRUE,keep_md=TRUE),
                   output_dir = here())
-
 ```
 
 ### Session information

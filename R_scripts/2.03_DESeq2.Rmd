@@ -20,12 +20,13 @@ library(readxl)
 library(org.Hs.eg.db)
 library(pheatmap)   
 library(rlist)
+library(dplyr)
 ```
 
 ## Creating the DeSeq2 object:
 First, the user needs to set the design of the model:
 ```{r}
-dds <- DESeqDataSetFromMatrix(countData = counts, colData = metadata, design = ~ subject + group)
+dds <- DESeqDataSetFromMatrix(countData = counts, colData = metadata, design = ~  subject + group)
 ```
 
 ## Set contrasts
@@ -121,6 +122,37 @@ plotPCA(vsd, intgroup=comparisons[[1]][1]) + stat_ellipse()
 dev.off()
 tiff("../Results/PCA_PC1-vs-PC2_rlog_ellipses.tiff",width =1000, height = 1000, units = "px")
 plotPCA(rld, intgroup=comparisons[[1]][1]) + stat_ellipse()
+dev.off()
+```
+
+```{r}
+# Custom PCA plot with shape for subject and color for group
+library(ggplot2)
+
+# Extract PCA data
+pca_data <- plotPCA(vsd, intgroup = c("group", "subject"), returnData = TRUE)
+
+# Ensure group and subject are treated as separate variables
+pca_data <- pca_data %>%
+  mutate(treatment_stage = as.factor(group.1),
+         subject = as.factor(subject))
+
+# Calculate percentage of variance explained by PC1 and PC2
+percentVar <- round(100 * attr(pca_data, "percentVar"))
+
+# Create the PCA plot
+tiff("../Results/PCA_PC1-vs-PC2_Custom.tiff", width = 1000, height = 1000, units = "px")
+ggplot(pca_data, aes(x = PC1, y = PC2, color = treatment_stage, shape = subject)) +
+  geom_point(size = 3) +
+  xlab(paste0("PC1: ", percentVar[1], "% variance")) +
+  ylab(paste0("PC2: ", percentVar[2], "% variance")) +
+  theme_minimal() +
+  theme(
+    legend.position = "right",
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 10)
+  ) +
+  ggtitle("PCA Plot: Shape by Subject, Color by Group")
 dev.off()
 ```
 
