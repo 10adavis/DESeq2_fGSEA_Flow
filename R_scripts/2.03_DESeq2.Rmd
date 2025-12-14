@@ -132,17 +132,16 @@ library(ggplot2)
 # Extract PCA data
 pca_data <- plotPCA(vsd, intgroup = c("group", "subject"), returnData = TRUE)
 
-# Ensure group and subject are treated as separate variables
-pca_data <- pca_data %>%
-  mutate(treatment_stage = as.factor(group.1),
-         subject = as.factor(subject))
+# Ensure group and subject are treated as separate factors
+pca_data$group <- as.factor(metadata$group[match(rownames(pca_data), rownames(metadata))])
+pca_data$subject <- as.factor(metadata$subject[match(rownames(pca_data), rownames(metadata))])
 
 # Calculate percentage of variance explained by PC1 and PC2
 percentVar <- round(100 * attr(pca_data, "percentVar"))
 
 # Create the PCA plot
 tiff("../Results/PCA_PC1-vs-PC2_Custom.tiff", width = 1000, height = 1000, units = "px")
-ggplot(pca_data, aes(x = PC1, y = PC2, color = treatment_stage, shape = subject)) +
+ggplot(pca_data, aes(x = PC1, y = PC2, color = group, shape = subject)) +
   geom_point(size = 3) +
   xlab(paste0("PC1: ", percentVar[1], "% variance")) +
   ylab(paste0("PC2: ", percentVar[2], "% variance")) +
@@ -154,6 +153,73 @@ ggplot(pca_data, aes(x = PC1, y = PC2, color = treatment_stage, shape = subject)
   ) +
   ggtitle("PCA Plot: Shape by Subject, Color by Group")
 dev.off()
+```
+
+## Interactive 3D PCA Plot:
+```{r, eval=TRUE}
+# Load plotly library
+library(plotly)
+
+# Perform PCA manually to include PC3
+pca_res <- prcomp(t(assay(vsd)))
+
+# Create a data frame with the first three principal components
+pca_data <- as.data.frame(pca_res$x[, 1:3])
+colnames(pca_data) <- c("PC1", "PC2", "PC3")
+
+# Add metadata for group and subject
+pca_data$group <- metadata$group[match(rownames(pca_data), rownames(metadata))]
+pca_data$subject <- metadata$subject[match(rownames(pca_data), rownames(metadata))]
+
+# Ensure group and subject are factors
+pca_data$group <- as.factor(pca_data$group)
+pca_data$subject <- as.factor(pca_data$subject)
+
+# Create 3D PCA plot
+plot_ly(
+  data = pca_data,
+  x = ~PC1, y = ~PC2, z = ~PC3,
+  color = ~group, symbol = ~subject,
+  colors = "Set1",
+  symbols = c("circle", "square", "triangle-up", "diamond"),
+  type = "scatter3d",
+  mode = "markers"
+) %>%
+  layout(
+    title = "Interactive 3D PCA Plot",
+    scene = list(
+      xaxis = list(title = paste0("PC1: ", round(100 * summary(pca_res)$importance[2, 1], 1), "% variance")),
+      yaxis = list(title = paste0("PC2: ", round(100 * summary(pca_res)$importance[2, 2], 1), "% variance")),
+      zaxis = list(title = paste0("PC3: ", round(100 * summary(pca_res)$importance[2, 3], 1), "% variance"))
+    )
+  )
+```
+
+```{r}
+# Save the interactive 3D PCA plot as an HTML file
+library(htmlwidgets)
+
+# Create the 3D PCA plot
+pca_plot <- plot_ly(
+  data = pca_data,
+  x = ~PC1, y = ~PC2, z = ~PC3,
+  color = ~group, symbol = ~subject,
+  colors = "Set1",
+  symbols = c("circle", "square", "triangle-up", "diamond"),
+  type = "scatter3d",
+  mode = "markers"
+) %>%
+  layout(
+    title = "Interactive 3D PCA Plot",
+    scene = list(
+      xaxis = list(title = paste0("PC1: ", round(100 * summary(pca_res)$importance[2, 1], 1), "% variance")),
+      yaxis = list(title = paste0("PC2: ", round(100 * summary(pca_res)$importance[2, 2], 1), "% variance")),
+      zaxis = list(title = paste0("PC3: ", round(100 * summary(pca_res)$importance[2, 3], 1), "% variance"))
+    )
+  )
+
+# Export the plot as an HTML file
+htmlwidgets::saveWidget(pca_plot, file = "../Results/Interactive_3D_PCA_Plot.html")
 ```
 
 ## Once you have your design you can run your DEseq2 analysis:

@@ -1,7 +1,7 @@
 ---
 title: "Enter analysis name here"
 author: "Andrew J. Davis, Ph.D."
-date: "21 February 2025"
+date: "13 December 2025"
 output:
   rmarkdown::html_document:
     toc: TRUE
@@ -129,7 +129,10 @@ Metadata associated with this analysis can be found in the [Metadata](Metadata) 
 
 ## Input Data
 
-The input data was acquired from \_\_\_\_\_\_ on 0/0/0000. Note that the contents of this folder will not be tracked by the remote repository by default (these files tend to be large to store on GitHub). To track the contents of this folder, one must remove the line "/Input/" from the [.gitignore](.gitignore) file.
+The input data for this analysis was derived from the study titled "Interferon Receptor Signaling Pathways Regulating PD-L1 and PD-L2 Expression" by Garcia-Diaz et al., published in *Cell Reports* in 2017. This dataset, available under GEO accession [GSE96619](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE96619), 
+includes transcriptomic data from melanoma biopsies collected pre- and post-anti-PD-1 treatment. 
+The study utilized paired-end RNA sequencing to investigate the interferon gamma-JAK1/2-STAT1-IRF1 axis and its role in regulating PD-L1 and PD-L2 expression. 
+The dataset provides a comprehensive view of the transcriptional changes associated with anti-PD-1 therapy, making it a valuable resource for understanding immune checkpoint regulation and therapeutic response.
 
 ## Analysis pipeline:
 
@@ -157,22 +160,24 @@ The resulting output files were saved to the [Results](Results) folder in this r
 #>  [3] "2.07_Volcano-Plots.html"                                               
 #>  [4] "3.03_GSEA.html"                                                        
 #>  [5] "4.03_Export-to-IPA.html"                                               
-#>  [6] "anti_PDL_treated_tumor_vs_baseline_tumor_DESeq2.csv"                   
-#>  [7] "anti_PDL_treated_tumor_vs_baseline_tumor_pvalue_histogram.tiff"        
-#>  [8] "anti_PDL_treated_tumor_vs_baseline_tumor_volcano_padj-0.1_log2FC-1.pdf"
-#>  [9] "DEG_Summary_Table.csv"                                                 
-#> [10] "DESeq2_dispersions_plot.pdf"                                           
-#> [11] "Filtered_Normalized_Counts.csv"                                        
-#> [12] "Filtered_Raw_Counts.csv"                                               
-#> [13] "GSEA_anti_PDL_treated_tumor_vs_baseline_tumor.csv"                     
-#> [14] "GSEA_Top-20-Gene-Sets_anti_PDL_treated_tumor_vs_baseline_tumor.pdf"    
-#> [15] "Heatmap_Select_Genes.pdf"                                              
-#> [16] "PCA_PC1-vs-PC2_rlog.tiff"                                              
-#> [17] "PCA_PC1-vs-PC2_rlog_ellipses.tiff"                                     
-#> [18] "PCA_PC1-vs-PC2_VST.tiff"                                               
-#> [19] "PCA_PC1-vs-PC2_VST_ellipses.tiff"                                      
-#> [20] "Sample_Correlation_rlog.pdf"                                           
-#> [21] "Sample_Correlation_VST.pdf"
+#>  [6] "5.03_Gene-Heatmaps.html"                                               
+#>  [7] "anti_PDL_treated_tumor_vs_baseline_tumor_DESeq2.csv"                   
+#>  [8] "anti_PDL_treated_tumor_vs_baseline_tumor_pvalue_histogram.tiff"        
+#>  [9] "anti_PDL_treated_tumor_vs_baseline_tumor_volcano_padj-0.1_log2FC-1.pdf"
+#> [10] "DEG_Summary_Table.csv"                                                 
+#> [11] "DESeq2_dispersions_plot.pdf"                                           
+#> [12] "Filtered_Normalized_Counts.csv"                                        
+#> [13] "Filtered_Raw_Counts.csv"                                               
+#> [14] "GSEA_anti_PDL_treated_tumor_vs_baseline_tumor.csv"                     
+#> [15] "GSEA_Top-20-Gene-Sets_anti_PDL_treated_tumor_vs_baseline_tumor.pdf"    
+#> [16] "Heatmap_Select_Genes.pdf"                                              
+#> [17] "PCA_PC1-vs-PC2_Custom.tiff"                                            
+#> [18] "PCA_PC1-vs-PC2_rlog.tiff"                                              
+#> [19] "PCA_PC1-vs-PC2_rlog_ellipses.tiff"                                     
+#> [20] "PCA_PC1-vs-PC2_VST.tiff"                                               
+#> [21] "PCA_PC1-vs-PC2_VST_ellipses.tiff"                                      
+#> [22] "Sample_Correlation_rlog.pdf"                                           
+#> [23] "Sample_Correlation_VST.pdf"
 ```
 
 ## IPA:
@@ -186,9 +191,29 @@ The resulting output files were saved to the [IPA](IPA) folder in this repositor
 #> [1] "Merged_Treatment_Comparisons_DESeq2_Results.csv"
 ```
 
-Describe any and all major insights generated from this analysis here....
+## Presentations_Reports
 
 Presentations and reports shared with other members of our team are stored in [Presentations_Reports](Presentations_Reports). Note that the contents of this folder will not be tracked by the remote repository by default (as these files tend to be large to store on GitHub). To track the contents of this folder, one must remove the line "/Presentations_Reports/" from the [.gitignore](.gitignore) file.
+
+## Summary of results:
+
+### Study Design and Input Samples
+
+This analysis was conducted using RNA-seq data from melanoma biopsies collected both before and after anti-PD-1 treatment. 
+The paired design of the study allowed for the direct comparison of transcriptional changes within the same patients, providing a robust framework for identifying treatment-induced effects. 
+The dataset included samples from multiple patients, ensuring that the findings are representative of a broader population.
+
+### Discussion
+
+The results of this analysis highlight the multifaceted impact of anti-PD-1 therapy on the tumor microenvironment. 
+The enrichment of immune-related pathways, such as complement activation, underscores the role of immune system activation in 
+mediating therapeutic effects. Additionally, the observed changes in neural signaling pathways suggest potential crosstalk between the nervous system and tumor biology, 
+which warrants further investigation. 
+
+Finally, the remodeling of the extracellular matrix may facilitate immune cell infiltration, enhancing the overall anti-tumor response.
+
+These findings not only provide insights into the mechanisms of action of anti-PD-1 therapy but also identify potential biomarkers and therapeutic targets for improving treatment outcomes.
+
 
 ## To do list:
 
@@ -205,44 +230,35 @@ This repository was generated from [10adavis/DESeq2_fGSEA_Flow v1.0](https://git
 sessionInfo()
 #> R version 4.3.1 (2023-06-16 ucrt)
 #> Platform: x86_64-w64-mingw32/x64 (64-bit)
-#> Running under: Windows 10 x64 (build 19045)
+#> Running under: Windows 11 x64 (build 22631)
 #> 
 #> Matrix products: default
 #> 
 #> 
 #> locale:
-#> [1] LC_COLLATE=English_United States.utf8 
-#> [2] LC_CTYPE=English_United States.utf8   
-#> [3] LC_MONETARY=English_United States.utf8
-#> [4] LC_NUMERIC=C                          
+#> [1] LC_COLLATE=English_United States.utf8  LC_CTYPE=English_United States.utf8   
+#> [3] LC_MONETARY=English_United States.utf8 LC_NUMERIC=C                          
 #> [5] LC_TIME=English_United States.utf8    
 #> 
 #> time zone: America/New_York
 #> tzcode source: internal
 #> 
 #> attached base packages:
-#> [1] stats4    parallel  stats     graphics  grDevices datasets  utils    
-#> [8] methods   base     
+#> [1] stats4    parallel  stats     graphics  grDevices datasets  utils     methods   base     
 #> 
 #> other attached packages:
-#>  [1] genefilter_1.82.1           gplots_3.1.3               
-#>  [3] scales_1.2.1                msigdbr_7.5.1              
-#>  [5] biomartr_1.0.5              data.table_1.14.8          
-#>  [7] GSEABase_1.62.0             graph_1.78.0               
-#>  [9] annotate_1.78.0             XML_3.99-0.14              
-#> [11] reactome.db_1.84.0          GO.db_3.17.0               
-#> [13] fgsea_1.26.0                dplyr_1.1.3                
-#> [15] magrittr_2.0.3              EnhancedVolcano_1.18.0     
-#> [17] ggrepel_0.9.4               rlist_0.4.6.2              
-#> [19] pheatmap_1.0.12             org.Hs.eg.db_3.17.0        
-#> [21] AnnotationDbi_1.62.2        readxl_1.4.3               
-#> [23] ggplot2_3.4.4               ashr_2.2-63                
-#> [25] DESeq2_1.40.2               SummarizedExperiment_1.30.2
-#> [27] Biobase_2.60.0              MatrixGenerics_1.12.3      
-#> [29] matrixStats_1.0.0           GenomicRanges_1.52.1       
-#> [31] GenomeInfoDb_1.36.4         IRanges_2.34.1             
-#> [33] S4Vectors_0.38.2            BiocGenerics_0.46.0        
-#> [35] future_1.33.0               rmarkdown_2.29             
+#>  [1] genefilter_1.82.1           gplots_3.1.3                scales_1.2.1               
+#>  [4] msigdbr_7.5.1               biomartr_1.0.5              data.table_1.14.8          
+#>  [7] GSEABase_1.62.0             graph_1.78.0                annotate_1.78.0            
+#> [10] XML_3.99-0.14               reactome.db_1.84.0          GO.db_3.17.0               
+#> [13] fgsea_1.26.0                magrittr_2.0.3              EnhancedVolcano_1.18.0     
+#> [16] ggrepel_0.9.4               dplyr_1.1.3                 rlist_0.4.6.2              
+#> [19] pheatmap_1.0.12             org.Hs.eg.db_3.17.0         AnnotationDbi_1.62.2       
+#> [22] readxl_1.4.3                ggplot2_3.4.4               ashr_2.2-63                
+#> [25] DESeq2_1.40.2               SummarizedExperiment_1.30.2 Biobase_2.60.0             
+#> [28] MatrixGenerics_1.12.3       matrixStats_1.0.0           GenomicRanges_1.52.1       
+#> [31] GenomeInfoDb_1.36.4         IRanges_2.34.1              S4Vectors_0.38.2           
+#> [34] BiocGenerics_0.46.0         future_1.33.0               rmarkdown_2.29             
 #> [37] here_1.0.1                 
 #> 
 #> loaded via a namespace (and not attached):
@@ -280,4 +296,4 @@ sessionInfo()
 #> [94] KEGGREST_1.40.1
 ```
 
-This document was processed on: 2025-02-21.
+This document was processed on: 2025-12-13.

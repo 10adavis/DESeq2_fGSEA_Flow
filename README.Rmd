@@ -135,7 +135,10 @@ Metadata associated with this analysis can be found in the [Metadata](Metadata) 
 
 ## Input Data
 
-The input data was acquired from \_\_\_\_\_\_ on 0/0/0000. Note that the contents of this folder will not be tracked by the remote repository by default (these files tend to be large to store on GitHub). To track the contents of this folder, one must remove the line "/Input/" from the [.gitignore](.gitignore) file.
+The input data for this analysis was derived from the study titled "Interferon Receptor Signaling Pathways Regulating PD-L1 and PD-L2 Expression" by Garcia-Diaz et al., published in *Cell Reports* in 2017. This dataset, available under GEO accession [GSE96619](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE96619), 
+includes transcriptomic data from melanoma biopsies collected pre- and post-anti-PD-1 treatment. 
+The study utilized paired-end RNA sequencing to investigate the interferon gamma-JAK1/2-STAT1-IRF1 axis and its role in regulating PD-L1 and PD-L2 expression. 
+The dataset provides a comprehensive view of the transcriptional changes associated with anti-PD-1 therapy, making it a valuable resource for understanding immune checkpoint regulation and therapeutic response.
 
 ## Analysis pipeline:
 
@@ -168,12 +171,30 @@ The resulting output files were saved to the [IPA](IPA) folder in this repositor
 
 ```{r, echo=FALSE}
 list.files(path="IPA")
-## Summary: 
 ```
 
-Describe any and all major insights generated from this analysis here....
+## Presentations_Reports
 
 Presentations and reports shared with other members of our team are stored in [Presentations_Reports](Presentations_Reports). Note that the contents of this folder will not be tracked by the remote repository by default (as these files tend to be large to store on GitHub). To track the contents of this folder, one must remove the line "/Presentations_Reports/" from the [.gitignore](.gitignore) file.
+
+## Summary of results:
+
+### Study Design and Input Samples
+
+This analysis was conducted using RNA-seq data from melanoma biopsies collected both before and after anti-PD-1 treatment. 
+The paired design of the study allowed for the direct comparison of transcriptional changes within the same patients, providing a robust framework for identifying treatment-induced effects. 
+The dataset included samples from multiple patients, ensuring that the findings are representative of a broader population.
+
+### Discussion
+
+The results of this analysis highlight the multifaceted impact of anti-PD-1 therapy on the tumor microenvironment. 
+The enrichment of immune-related pathways, such as complement activation, underscores the role of immune system activation in mediating therapeutic effects. 
+Additionally, the observed changes in neural signaling pathways suggest potential crosstalk between the nervous system and tumor biology, which warrants further investigation. 
+
+Finally, the remodeling of the extracellular matrix may facilitate immune cell infiltration, enhancing the overall anti-tumor response.
+
+These findings not only provide insights into the mechanisms of action of anti-PD-1 therapy but also identify potential biomarkers and therapeutic targets for improving treatment outcomes.
+
 
 ## To do list:
 
